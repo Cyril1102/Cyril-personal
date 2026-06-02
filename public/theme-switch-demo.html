@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Direction Demo</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --demo-bg: #0a0b0a;
+        --demo-text: #f3efe6;
+        --demo-muted: #a2aca2;
+        --demo-line: rgba(255, 255, 255, 0.12);
+        --demo-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        font-family: "IBM Plex Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top, rgba(144, 195, 122, 0.08), transparent 22%),
+          radial-gradient(circle at 80% 10%, rgba(170, 143, 244, 0.08), transparent 26%),
+          linear-gradient(180deg, #090908, #070808 56%, #050606);
+        color: var(--demo-text);
+      }
+
+      .page {
+        width: min(1440px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 40px 0 80px;
+      }
+
+      .intro {
+        max-width: 720px;
+        margin-bottom: 28px;
+      }
+
+      .intro h1 {
+        margin: 0 0 10px;
+        font-size: clamp(2rem, 3vw, 3.4rem);
+        line-height: 0.96;
+        letter-spacing: 0;
+      }
+
+      .intro p {
+        margin: 0;
+        color: #a9b2aa;
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .compare {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .demo-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 900px;
+        border-radius: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: var(--demo-shadow);
+      }
+
+      .demo-card::before {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.12), transparent 20%),
+          radial-gradient(circle at 72% 16%, rgba(174, 132, 255, 0.1), transparent 24%),
+          radial-gradient(circle at 28% 80%, rgba(145, 198, 122, 0.08), transparent 28%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .demo-card.dark {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
+          radial-gradient(circle at 50% 52%, rgba(120, 182, 228, 0.08), transparent 20%),
+          linear-gradient(180deg, #0a0b0a, #090a09 52%, #080908);
+      }
+
+      .demo-card.light {
+        color: #192126;
+        border-color: rgba(143, 151, 162, 0.22);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.28)),
+          radial-gradient(circle at 16% 18%, rgba(210, 229, 211, 0.76), transparent 20%),
+          radial-gradient(circle at 84% 16%, rgba(217, 209, 252, 0.8), transparent 24%),
+          radial-gradient(circle at 52% 52%, rgba(157, 191, 224, 0.2), transparent 22%),
+          linear-gradient(180deg, #edf1f4, #e8edf0 40%, #e5eaee 100%);
+      }
+
+      .demo-card.light::before {
+        background:
+          radial-gradient(circle at 16% 16%, rgba(255, 255, 255, 0.9), transparent 16%),
+          radial-gradient(circle at 76% 18%, rgba(175, 160, 248, 0.24), transparent 22%),
+          radial-gradient(circle at 30% 82%, rgba(170, 210, 172, 0.2), transparent 24%);
+      }
+
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: radial-gradient(circle at 52% 44%, black, transparent 82%);
+        opacity: 0.7;
+      }
+
+      .light .grid {
+        background-image:
+          linear-gradient(rgba(76, 83, 91, 0.085) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(76, 83, 91, 0.085) 1px, transparent 1px);
+        opacity: 0.42;
+      }
+
+      .curve,
+      .curve-2 {
+        position: absolute;
+        inset: auto 0 0;
+        height: 100%;
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      .curve svg,
+      .curve-2 svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .curve path {
+        fill: none;
+        stroke: rgba(146, 197, 121, 0.24);
+        stroke-width: 1.4;
+      }
+
+      .curve-2 path {
+        fill: none;
+        stroke: rgba(167, 139, 250, 0.2);
+        stroke-width: 1.2;
+      }
+
+      .light .curve path {
+        stroke: rgba(120, 170, 102, 0.22);
+      }
+
+      .light .curve-2 path {
+        stroke: rgba(148, 125, 228, 0.22);
+      }
+
+      .frame {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        min-height: 100%;
+        padding: 26px 28px 34px;
+      }
+
+      .demo-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #d6ded4;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        backdrop-filter: blur(18px) saturate(140%);
+        -webkit-backdrop-filter: blur(18px) saturate(140%);
+      }
+
+      .light .demo-label {
+        background: rgba(255, 255, 255, 0.52);
+        color: #293036;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-mark,
+      .glass-pill,
+      .glass-button,
+      .switcher,
+      .signal-panel,
+      .signal-row {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.055);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.18),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+          0 18px 40px rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+      }
+
+      .brand-mark::before,
+      .glass-pill::before,
+      .glass-button::before,
+      .switcher::before,
+      .signal-panel::before,
+      .signal-row::before {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 42%),
+          radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.16), transparent 24%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .light .brand-mark,
+      .light .glass-pill,
+      .light .glass-button,
+      .light .switcher,
+      .light .signal-panel,
+      .light .signal-row {
+        border-color: rgba(129, 139, 150, 0.16);
+        background: rgba(255, 255, 255, 0.48);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.8),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+          0 18px 48px rgba(111, 120, 126, 0.12);
+      }
+
+      .brand-mark {
+        display: inline-flex;
+        width: 48px;
+        height: 48px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .brand-copy {
+        display: grid;
+        gap: 4px;
+      }
+
+      .brand-copy strong {
+        font-size: 16px;
+        line-height: 1;
+      }
+
+      .brand-copy small {
+        color: rgba(218, 224, 217, 0.72);
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      .light .brand-copy small {
+        color: rgba(64, 72, 79, 0.62);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .glass-pill {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        gap: 0;
+        padding: 0 6px;
+        border-radius: 18px;
+      }
+
+      .glass-pill a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 92px;
+        min-height: 38px;
+        padding: 0 14px;
+        color: inherit;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: 13px;
+      }
+
+      .glass-pill a.active {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .light .glass-pill a.active {
+        background: rgba(32, 38, 44, 0.86);
+        color: #f3f6f7;
+      }
+
+      .switcher {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 48px;
+        padding: 4px;
+        border-radius: 18px;
+      }
+
+      .switcher button {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 38px;
+        border: 0;
+        border-radius: 13px;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        cursor: default;
+      }
+
+      .switcher button.is-active {
+        background: rgba(150, 201, 121, 0.82);
+        color: #081008;
+      }
+
+      .light .switcher button.is-active {
+        background: rgba(30, 36, 41, 0.88);
+        color: #f3f5f8;
+      }
+
+      .switcher.lang button {
+        min-width: 44px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 260px;
+        align-items: end;
+        min-height: 730px;
+        padding-top: 48px;
+        gap: 24px;
+      }
+
+      .hero-copy {
+        max-width: 600px;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: rgba(213, 221, 211, 0.78);
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      .light .eyebrow {
+        color: rgba(50, 58, 63, 0.68);
+      }
+
+      .hero-title {
+        margin: 0;
+        font-size: clamp(4.3rem, 6vw, 6.8rem);
+        font-weight: 760;
+        line-height: 0.9;
+        letter-spacing: -0.035em;
+      }
+
+      .hero-title .tint {
+        background: linear-gradient(135deg, #d7e9c7 0%, #cfe1b1 38%, #cfbfff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .light .hero-title .tint {
+        background: linear-gradient(135deg, #334347 0%, #738d69 46%, #907fda 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-role {
+        margin: 26px 0 0;
+        color: rgba(240, 242, 236, 0.88);
+        font-size: 22px;
+        font-weight: 620;
+        line-height: 1.35;
+      }
+
+      .light .hero-role {
+        color: rgba(29, 36, 41, 0.88);
+      }
+
+      .hero-body {
+        max-width: 760px;
+        margin: 20px 0 0;
+        color: rgba(213, 221, 211, 0.76);
+        font-size: 27px;
+        font-weight: 560;
+        line-height: 1.34;
+        letter-spacing: -0.02em;
+      }
+
+      .light .hero-body {
+        color: rgba(54, 63, 69, 0.76);
+      }
+
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 34px;
+      }
+
+      .glass-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 56px;
+        padding: 0 26px;
+        border-radius: 999px;
+        color: inherit;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .glass-button.primary {
+        background: rgba(150, 201, 121, 0.88);
+        color: #081008;
+      }
+
+      .light .glass-button.primary {
+        background: rgba(28, 33, 38, 0.88);
+        color: #f3f5f8;
+      }
+
+      .hero-note {
+        display: grid;
+        align-content: end;
+      }
+
+      .signal-panel {
+        display: grid;
+        gap: 12px;
+        padding: 18px;
+        border-radius: 28px;
+      }
+
+      .signal-panel header {
+        display: grid;
+        gap: 6px;
+      }
+
+      .signal-panel strong {
+        font-size: 14px;
+        font-weight: 700;
+        color: #9ccd7b;
+      }
+
+      .light .signal-panel strong {
+        color: #6c8a5b;
+      }
+
+      .signal-panel p {
+        margin: 0;
+        color: rgba(219, 224, 217, 0.74);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .light .signal-panel p {
+        color: rgba(59, 67, 73, 0.72);
+      }
+
+      .signal-row {
+        display: grid;
+        gap: 4px;
+        padding: 14px 16px;
+        border-radius: 20px;
+      }
+
+      .signal-row span {
+        color: rgba(221, 228, 218, 0.62);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .light .signal-row span {
+        color: rgba(67, 76, 82, 0.54);
+      }
+
+      .signal-row b {
+        font-size: 17px;
+        line-height: 1.3;
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        color: #8f988f;
+        font-size: 13px;
+      }
+
+      @media (max-width: 1180px) {
+        .compare {
+          grid-template-columns: 1fr;
+        }
+
+        .demo-card {
+          min-height: 820px;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .page {
+          width: min(100% - 24px, 1440px);
+          padding-top: 24px;
+        }
+
+        .frame {
+          padding: 18px 18px 24px;
+        }
+
+        .topbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-actions {
+          flex-wrap: wrap;
+        }
+
+        .glass-pill {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .glass-pill a {
+          min-width: auto;
+          flex: 1;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: 620px;
+          padding-top: 26px;
+        }
+
+        .hero-title {
+          font-size: 3.45rem;
+        }
+
+        .hero-role {
+          font-size: 18px;
+        }
+
+        .hero-body {
+          font-size: 20px;
+        }
+
+        .hero-actions {
+          flex-wrap: wrap;
+        }
+
+        .hero-note {
+          margin-top: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="intro">
+        <h1>首页主题切换 demo</h1>
+        <p>
+          这页只看视觉方向，不改现有站点。重点是液态玻璃材质、深浅两套配色，以及主题切换按钮放在语言切换旁边之后的头部秩序。
+        </p>
+      </section>
+
+      <section class="compare">
+        <article class="demo-card dark">
+          <div class="grid"></div>
+          <div class="curve">
+            <svg viewBox="0 0 1200 900" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,580 C180,540 220,460 380,470 C530,480 630,620 780,610 C930,600 1020,480 1200,520" />
+            </svg>
+          </div>
+          <div class="curve-2">
+            <svg viewBox="0 0 1200 900" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,690 C190,630 250,720 400,690 C540,662 622,530 760,520 C910,510 1030,610 1200,560" />
+            </svg>
+          </div>
+          <div class="frame">
+            <div class="demo-label">方案 A / 深色 Executive Glass</div>
+            <div class="topbar">
+              <div class="brand">
+                <div class="brand-mark">CL</div>
+                <div class="brand-copy">
+                  <strong>刘柏希</strong>
+                  <small>PMO / 项目集管理</small>
+                </div>
+              </div>
+              <div class="header-actions">
+                <nav class="glass-pill" aria-label="主导航">
+                  <a class="active" href="/">案例故事</a>
+                  <a href="/">工作方法</a>
+                  <a href="/">职业背景</a>
+                </nav>
+                <div class="switcher" aria-label="主题切换">
+                  <button class="is-active" type="button" aria-label="深色主题">◐</button>
+                  <button type="button" aria-label="浅色主题">◌</button>
+                </div>
+                <div class="switcher lang" aria-label="语言切换">
+                  <button class="is-active" type="button">中</button>
+                  <button type="button">EN</button>
+                </div>
+              </div>
+            </div>
+            <div class="hero">
+              <div class="hero-copy">
+                <p class="eyebrow">Business-facing PMO / Program & Portfolio Management Lead</p>
+                <h2 class="hero-title">你好，<span class="tint">我是</span><br />刘柏希</h2>
+                <p class="hero-role">复杂业务需要清晰判断，也需要稳定推进。</p>
+                <p class="hero-body">我长期处理方向变化、资源拉扯和跨团队协作，把关键问题提早放到桌面上，再把事情带进可执行的节奏。</p>
+                <div class="hero-actions">
+                  <a class="glass-button primary" href="/">查看案例</a>
+                  <a class="glass-button" href="/">联系我</a>
+                </div>
+              </div>
+              <aside class="hero-note">
+                <section class="signal-panel">
+                  <header>
+                    <strong>更适合当前主站</strong>
+                    <p>稳、静、克制。更像一套面向管理层的 AI operating layer。</p>
+                  </header>
+                  <div class="signal-row">
+                    <span>Signal</span>
+                    <b>方向、风险、资源</b>
+                  </div>
+                  <div class="signal-row">
+                    <span>Texture</span>
+                    <b>Matte black + soft glass</b>
+                  </div>
+                  <div class="signal-row">
+                    <span>Feeling</span>
+                    <b>Executive and focused</b>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </div>
+        </article>
+
+        <article class="demo-card light">
+          <div class="grid"></div>
+          <div class="curve">
+            <svg viewBox="0 0 1200 900" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,560 C170,540 250,430 410,452 C560,474 664,620 806,610 C956,600 1040,470 1200,516" />
+            </svg>
+          </div>
+          <div class="curve-2">
+            <svg viewBox="0 0 1200 900" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,690 C160,628 252,708 402,680 C542,654 620,540 766,530 C912,520 1026,612 1200,572" />
+            </svg>
+          </div>
+          <div class="frame">
+            <div class="demo-label">方案 B / 浅色 Pearl Glass</div>
+            <div class="topbar">
+              <div class="brand">
+                <div class="brand-mark">CL</div>
+                <div class="brand-copy">
+                  <strong>刘柏希</strong>
+                  <small>PMO / 项目集管理</small>
+                </div>
+              </div>
+              <div class="header-actions">
+                <nav class="glass-pill" aria-label="主导航">
+                  <a class="active" href="/">案例故事</a>
+                  <a href="/">工作方法</a>
+                  <a href="/">职业背景</a>
+                </nav>
+                <div class="switcher" aria-label="主题切换">
+                  <button type="button" aria-label="深色主题">◐</button>
+                  <button class="is-active" type="button" aria-label="浅色主题">◌</button>
+                </div>
+                <div class="switcher lang" aria-label="语言切换">
+                  <button class="is-active" type="button">中</button>
+                  <button type="button">EN</button>
+                </div>
+              </div>
+            </div>
+            <div class="hero">
+              <div class="hero-copy">
+                <p class="eyebrow">Business-facing PMO / Program & Portfolio Management Lead</p>
+                <h2 class="hero-title">你好，<span class="tint">我是</span><br />刘柏希</h2>
+                <p class="hero-role">把复杂项目整理成可判断、可推进的节奏。</p>
+                <p class="hero-body">浅色版本我改成了更冷静的珍珠灰基底。文字不是压在亮面上，而是像写在一层轻薄材质里，更适合长时间阅读案例和方法。</p>
+                <div class="hero-actions">
+                  <a class="glass-button primary" href="/">查看案例</a>
+                  <a class="glass-button" href="/">联系我</a>
+                </div>
+              </div>
+              <aside class="hero-note">
+                <section class="signal-panel">
+                  <header>
+                    <strong>更像 presentation site</strong>
+                    <p>亮度更柔和，阅读更轻，适合把案例页做得更像一份高级商业叙事。</p>
+                  </header>
+                  <div class="signal-row">
+                    <span>Base</span>
+                    <b>Pearl grey + cool ink</b>
+                  </div>
+                  <div class="signal-row">
+                    <span>Glass</span>
+                    <b>Soft refraction and thin edge</b>
+                  </div>
+                  <div class="signal-row">
+                    <span>Feeling</span>
+                    <b>Editorial and executive</b>
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <p class="footer-note">预览链接：`/theme-switch-demo.html`</p>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.tools/
+.superpowers/
+.tmp-chrome-recording/
+*.tsbuildinfo
+artifacts/
+docs/superpowers/
+tasks/
+video/
+public/.DS_Store
+public/media/

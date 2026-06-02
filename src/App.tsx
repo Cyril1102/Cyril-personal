@@ -1,0 +1,1820 @@
+import { useEffect, useState, type CSSProperties, type JSX } from 'react';
+import baixiJournalBodyZh from './content/baixi-xyz-小白建站全记录.md?raw';
+import baixiJournalBodyEn from './content/baixi-xyz-build-log.en.md?raw';
+import vibeCodingJournalBodyZh from './content/vibe-coding-portfolio-retrospective.md?raw';
+import vibeCodingJournalBodyEn from './content/vibe-coding-portfolio-retrospective.en.md?raw';
+import {
+  ArrowRight,
+  BookOpen,
+  BriefcaseBusiness,
+  Code2,
+  Compass,
+  ExternalLink,
+  FileText,
+  GraduationCap,
+  Layers3,
+  Mail,
+  Menu,
+  Route,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  X,
+} from 'lucide-react';
+
+type Language = 'zh' | 'en';
+type Theme = 'dark' | 'light';
+type BrandName = 'Gate' | 'Coins.ph' | 'Binance' | 'Ctrip.com' | 'WeWork' | 'HAND';
+
+const brandLogoAssets: Record<BrandName, { src: string; bg: string; border: string; shadow: string; pad?: string }> = {
+  Gate: {
+    src: '/logos/gate-cropped.png',
+    bg: '#fffafa',
+    border: 'rgba(222, 89, 89, 0.38)',
+    shadow: '0 18px 48px rgba(222, 89, 89, 0.18)',
+    pad: '13px',
+  },
+  'Coins.ph': {
+    src: '/logos/coins.svg',
+    bg: '#17191d',
+    border: 'rgba(238, 160, 35, 0.42)',
+    shadow: '0 18px 48px rgba(31, 122, 255, 0.16)',
+    pad: '12px',
+  },
+  Binance: {
+    src: '/logos/binance.svg',
+    bg: '#17130b',
+    border: 'rgba(240, 185, 11, 0.56)',
+    shadow: '0 18px 48px rgba(240, 185, 11, 0.20)',
+    pad: '14px',
+  },
+  'Ctrip.com': {
+    src: '/logos/ctrip.png',
+    bg: '#f7fbff',
+    border: 'rgba(47, 109, 246, 0.46)',
+    shadow: '0 18px 48px rgba(47, 109, 246, 0.18)',
+    pad: '10px',
+  },
+  WeWork: {
+    src: '/logos/wework.png',
+    bg: '#ffffff',
+    border: 'rgba(244, 241, 232, 0.30)',
+    shadow: '0 18px 48px rgba(244, 241, 232, 0.12)',
+    pad: '13px',
+  },
+  HAND: {
+    src: '/logos/hand-cropped.png',
+    bg: '#ffffff',
+    border: 'rgba(236, 32, 48, 0.35)',
+    shadow: '0 18px 48px rgba(236, 32, 48, 0.14)',
+    pad: '10px',
+  },
+};
+
+const schoolLogoAssets = {
+  manchester: {
+    src: '/logos/manchester.png',
+    bg: '#ffffff',
+    border: 'rgba(108, 38, 130, 0.34)',
+    pad: '10px',
+  },
+  tianfu: {
+    src: '/logos/tianfu.png',
+    bg: '#172033',
+    border: 'rgba(218, 164, 76, 0.40)',
+    pad: '10px',
+  },
+};
+
+const nav = {
+  zh: [
+    ['案例故事', '#case-studies'],
+    ['工作方法', '#method'],
+    ['职业背景', '#background'],
+    ['教育背景', '#education'],
+    ['联系', '#contact'],
+  ],
+  en: [
+    ['Cases', '#case-studies'],
+    ['Method', '#method'],
+    ['Career', '#background'],
+    ['Education', '#education'],
+    ['Contact', '#contact'],
+  ],
+};
+
+const content = {
+  zh: {
+    greetingLead: '你好，',
+    greetingFocus: '我是',
+    name: '刘柏希',
+    role: '业务型 PMO / 项目集与项目组合管理负责人',
+    manifesto: '我关心真正影响交付的事：方向、风险、资源和决策。',
+    primary: '查看案例',
+    secondary: '联系我',
+    journeyKicker: '职业路径',
+    journeyTitle: '一条围绕判断展开的路径',
+    journeyIntro:
+      '从 ROI 评审到全球支付，再到国际化落地和多业务线治理，我的路径始终围绕同一件事：在复杂现场做判断，让团队看清下一步。',
+    methodKicker: '工作方法',
+    methodTitle: '把复杂协作理成清晰节奏',
+    methodIntro: '做项目管理，我通常先看价值、风险、资源和决策。真正考验人的，往往是判断能不能提前。',
+    journalKicker: '学习札记',
+    journalTitle: '把新的工作方式记下来',
+    journalIntro: '这里记 Vibe Coding、AI PMO 和个人工作流。比起工具本身，我更关心它们怎样改变真实工作。',
+    experienceKicker: '项目案例',
+    experienceTitle: '几个关键项目现场',
+    experienceIntro:
+      '这些案例覆盖品牌切换、增长、支付、合规和国际化场景，也更接近我工作里最有代表性的几个现场。',
+    educationKicker: '教育经历',
+    educationTitle: '从项目现场走向系统学习',
+    educationIntro:
+      '开始做项目管理之后，我慢慢意识到，这份工作背后其实是对目标、协同和资源取舍的判断。后来选择商业项目管理，也是想把这些现场经验放进更系统的方法里，让自己的路径走得更清楚。',
+    contactKicker: '联系方式',
+    contactTitle: '保持联系',
+    contactBody: '如果你想进一步了解我的项目治理、全球交付或 AI PMO 实践，欢迎通过邮件或领英联系我。',
+    website: '官网',
+    linkedin: '领英',
+    resumeSoon: '简历下载准备中',
+  },
+  en: {
+    greetingLead: 'Hi,',
+    greetingFocus: "I'm",
+    name: 'Cyril Liu',
+    role: 'PMO Lead / Program & Portfolio Management',
+    manifesto: 'I focus on the parts of work that shape delivery: direction, risk, resourcing, and decisions.',
+    primary: 'View Cases',
+    secondary: 'Contact',
+    journeyKicker: 'Career',
+    journeyTitle: 'A Career Built on Judgment',
+    journeyIntro:
+      'From ROI review to global payments, market launches, and portfolio governance, the pattern in my work has stayed the same: make clear calls in complex settings and give teams a clear next move.',
+    methodKicker: 'Method',
+    methodTitle: 'Bringing Order to Complex Work',
+    methodIntro:
+      'I come back to four questions: what matters, where the risk sits, what resources are actually available, and who needs to decide.',
+    journalKicker: 'Learning Log',
+    journalTitle: 'Working Notes',
+    journalIntro:
+      'This is where I keep notes on Vibe Coding, AI PMO, and workflow experiments. What matters to me is how they change real work.',
+    experienceKicker: 'Case Studies',
+    experienceTitle: 'Selected Case Studies',
+    experienceIntro:
+      'These cases span brand migration, growth, payments, compliance, and market launches. Together they show the way I work: read the situation clearly, then organize the work around it.',
+    educationKicker: 'Education',
+    educationTitle: 'From Project Work to Formal Study',
+    educationIntro:
+      'After a few years in project management, I understood that the work ran deeper than scheduling. Commercial Project Management gave me a more formal framework for thinking about goals, coordination, and trade-offs, and sharpened the path toward business-oriented PMO work.',
+    contactKicker: 'Contact',
+    contactTitle: "Let's Connect",
+    contactBody: 'For conversations about project governance, global delivery, or AI PMO, email or LinkedIn is the best place to start.',
+    website: 'Website',
+    linkedin: 'LinkedIn',
+    resumeSoon: 'Resume download coming soon',
+  },
+};
+
+const journey = {
+  zh: {
+    memoTitle: '先看清，再推进',
+    memo:
+      '我做 PMO 时先看两件事：关键问题有没有及时浮上来，决定是不是落在合适的人手里。项目越复杂，越不能只盯进度。目标、代价、依赖和风险一旦说不清，后面的执行只会越来越贵。',
+    signals: ['价值判断', '交付秩序', '风险前置', '机制沉淀'],
+    path: [
+      {
+        year: '2019 - 2021',
+        company: 'Ctrip.com',
+        phase: '价值判断',
+        source: '携程 / ROI 委员会',
+        title: '价值判断先于排期。',
+        body:
+          '在携程参与 ROI 评审，让我更早接触到需求进入研发队列前的价值判断。自由行、交易中台、结算中台和研发效能分析的经历，也让我把项目管理的视线前移到投入、回报和优先级。这成为我后来处理项目组合的起点。',
+        proof: 'ROI 委员会评审 / 研发效能分析 / 交易与结算中台',
+      },
+      {
+        year: '2021 - 2023',
+        company: 'Binance',
+        phase: '全球交付',
+        source: 'Binance / 全球法币支付',
+        title: '让全球团队按同一套标准交付。',
+        body:
+          '法币支付牵涉合规、风控、区域业务、运营和研发。监管判断和区域策略一变化，项目边界就会移动。我的工作，是把边界、验收和升级路径讲清楚，让 E2E 流程、DOD、风险审计和问题升级进入日常秩序。',
+        proof: '2022 年约 45% 全球法币支付项目 / E2E 流程 / DOD',
+      },
+      {
+        year: '2024 - 2025',
+        company: 'Coins.ph',
+        phase: '国际化落地',
+        source: 'Coins.ph / 市场拓展',
+        title: '国际化落地考验的是路径感。',
+        body:
+          '澳大利亚、巴西、欧洲市场各有自己的进入条件。监管判断、KYC、法币链路、钱包隔离、合作方节奏和上线验收都会改写项目边界。这段经历让我更习惯在变化里识别约束，再把它整理成优先级、依赖、风险和下一步动作。',
+        proof: '澳大利亚 / 巴西 / 欧洲市场拓展 / 交付周期缩短约 15%',
+      },
+      {
+        year: '2025 - 2026.04',
+        company: 'Gate',
+        phase: '组合治理',
+        source: 'Gate / 多业务线 PMO',
+        title: '把高并发项目收进同一张管理视图。',
+        body:
+          'Gate 的难度在于多条业务线同时加速：品牌升级、增长、支付卡、AI 提效和实验项目都在争资源和注意力。我的工作，是让每条线的状态、风险和取舍及时被看见。需求池、状态看板、风险预警、管理层周报和 AI 辅助分析，也在这个过程中慢慢长成一套可复用的组合治理方式。',
+        proof: 'Gate.com 3 周迁移无重大事故 / SEO GEO ASO / AI PMO',
+      },
+    ],
+  },
+  en: {
+    memoTitle: 'See clearly, then move',
+    memo:
+      'The work I care about starts before a project goes off track. The real question is whether the right issues become visible early enough, and whether decisions are made by the right people. Once goals, costs, dependencies, and risks blur together, execution becomes expensive.',
+    signals: ['Value judgment', 'Delivery rhythm', 'Risk visibility', 'Operating discipline'],
+    path: [
+      {
+        year: '2019 - 2021',
+        company: 'Ctrip.com',
+        phase: 'Business judgment',
+        source: 'Ctrip.com / ROI committee',
+        title: 'Decide value before you schedule.',
+        body:
+          'At Ctrip, ROI reviews pushed project work upstream into business judgment. Before a request entered the engineering queue, it had to justify its place in terms of business value, return, priority, and resource cost. That perspective stayed with me and later shaped how I looked at programs and portfolios.',
+        proof: 'ROI review / engineering efficiency / transaction and settlement platforms',
+      },
+      {
+        year: '2021 - 2023',
+        company: 'Binance',
+        phase: 'Global delivery',
+        source: 'Binance / Global fiat payments',
+        title: 'Put global teams on the same delivery standard.',
+        body:
+          "Fiat payments sat across compliance, risk, regional business, operations, and engineering. When regulation or regional strategy changed, the program boundary moved too. I kept scope, acceptance, and escalation clear, then made E2E flow, DOD, and risk review part of the team's operating rhythm.",
+        proof: 'Around 45% of 2022 global fiat payment programs / E2E flow / DOD',
+      },
+      {
+        year: '2024 - 2025',
+        company: 'Coins.ph',
+        phase: 'International launch',
+        source: 'Coins.ph / Market expansion',
+        title: 'International launch depends on finding the path.',
+        body:
+          'Australia, Brazil, and Europe each came with different entry conditions. Regulation, KYC, fiat rails, wallet setup, partner readiness, and launch criteria kept shifting the project boundary. I learned to spot constraints early and turn them into priorities, risks, dependencies, and next steps.',
+        proof: 'Australia / Brazil / Europe expansion / around 15% shorter delivery cycles',
+      },
+      {
+        year: '2025 - Apr 2026',
+        company: 'Gate',
+        phase: 'Portfolio governance',
+        source: 'Gate / Multi-business PMO',
+        title: 'Bring parallel programs into one management view.',
+        body:
+          'At Gate, several business lines accelerated at once: brand upgrade, growth, payment cards, AI efficiency, and experiments. Each one competed for resources and attention. I made status, risk, and trade-offs visible early, and gradually turned demand pools, dashboards, risk alerts, executive reporting, and AI-assisted analysis into a repeatable portfolio governance model.',
+        proof: 'Gate.com migration in 3 weeks without major incidents / SEO, GEO, ASO / AI PMO',
+      },
+    ],
+  },
+};
+
+const methodCards = {
+  zh: [
+    {
+      number: '01',
+      title: '先判断价值，再组织项目',
+      body: '需求进入队列前，先看它服务的业务目标、预期收益和资源代价，再决定项目组合、节奏和取舍。',
+      case: 'SEO / GEO / ASO 从散点需求被整理成增长项目组合。',
+    },
+    {
+      number: '02',
+      title: '风险要在变大前出现',
+      body: '方案、资源、验收和依赖刚出现偏差，风险就应该进入团队和管理层视野。',
+      case: 'Gate.com 迁移中，触点清单和验收截图让遗漏更早暴露。',
+    },
+    {
+      number: '03',
+      title: '汇报要服务判断',
+      body: '好的汇报只回答几件事：目标是否还成立，资源够不够，哪些问题需要升级，下一步由谁负责。',
+      case: 'RDER / Card 汇报从进度同步转向资源、优先级和风险判断。',
+    },
+    {
+      number: '04',
+      title: 'AI 应该进入 PMO 的日常工作流',
+      body: 'AI 负责整理信息、发现异常、生成初稿，把人的时间留给取舍、沟通和推动。',
+      case: '周报、迭代分析和风险梳理减少了重复整理时间。',
+    },
+  ],
+  en: [
+    {
+      number: '01',
+      title: 'Judge value before organizing the work',
+      body: 'Before a request enters the queue, look at the goal, expected return, and resource cost. Only then decide the portfolio, rhythm, and trade-offs.',
+      case: 'SEO / GEO / ASO moved from scattered requests into a growth portfolio.',
+    },
+    {
+      number: '02',
+      title: 'Risk should surface early',
+      body: 'When plans, resources, acceptance criteria, or dependencies begin to drift, risk should already be visible to both the team and leadership.',
+      case: 'Gate.com migration used touchpoint maps and validation screenshots to expose gaps early.',
+    },
+    {
+      number: '03',
+      title: 'Reporting should sharpen judgment',
+      body: 'Good reporting answers a small set of questions: is the goal still valid, are resources enough, what needs escalation, and who owns the next step?',
+      case: 'RDER / Card reporting moved from progress updates to resource and risk decisions.',
+    },
+    {
+      number: '04',
+      title: 'AI should support the PMO workflow',
+      body: 'AI can organize information, detect anomalies, and draft reports. That leaves more time for trade-offs, communication, and follow-through.',
+      case: 'Weekly reports, sprint analysis, and risk reviews became less repetitive to prepare.',
+    },
+  ],
+};
+
+type JournalEntry = {
+  slug: string;
+  tag: string;
+  date: string;
+  title: string;
+  summary: string;
+  body?: string;
+  sourceUrl?: string;
+};
+
+const journalEntries: Record<Language, JournalEntry[]> = {
+  zh: [
+    {
+      slug: 'vibe-coding-portfolio-retrospective',
+      tag: 'Vibe Coding',
+      date: '2026.06.03',
+      title: '从一个个人网站开始，重新理解 Vibe Coding',
+      summary:
+        '这篇复盘记录了我用 AI 协作完成个人品牌网站的过程。页面只是结果，真正值得记下来的，是产品定义、提示词设计、设计验收和非技术背景下的 AI Coding 协作方式。',
+      body: vibeCodingJournalBodyZh,
+    },
+    {
+      slug: 'baixi-xyz-launch-log',
+      tag: '建站记录',
+      date: '2026.05.23',
+      title: '从买服务器到网站上线的第一条流水线',
+      summary:
+        '我把 baixi.xyz 从服务器、域名、DNS、防火墙、Nginx、证书到备案的整个上线过程完整记了下来。它当然是一篇建站记录，但对我来说，更像一次把真实部署、非技术视角和 AI 协作放进同一条交付链路里的实践。',
+      body: baixiJournalBodyZh,
+      sourceUrl: 'https://www.baixi.xyz/',
+    },
+  ],
+  en: [
+    {
+      slug: 'vibe-coding-portfolio-retrospective',
+      tag: 'Vibe Coding',
+      date: '2026.06.03',
+      title: 'What Building My Portfolio Taught Me About Vibe Coding',
+      summary:
+        'A reflection on building my personal portfolio with AI: what worked, what broke down, and what I learned about product framing, prompts, design review, and AI-assisted delivery as a non-engineer.',
+      body: vibeCodingJournalBodyEn,
+    },
+    {
+      slug: 'baixi-xyz-launch-log',
+      tag: 'Build Log',
+      date: '2026.05.23',
+      title: 'From Buying a Server to Launching My First Site',
+      summary:
+        'This is my own record of how baixi.xyz went from a fresh server and domain to a live site, with DNS, firewall rules, Nginx, HTTPS, and ICP filing all connected along the way.',
+      body: baixiJournalBodyEn,
+    },
+  ],
+};
+
+type CaseStudy = {
+  id: string;
+  company: BrandName;
+  label: string;
+  title: string;
+  summary: string;
+  role: string;
+  metrics: string[];
+  tags: string[];
+  announcement?: {
+    label: string;
+    title: string;
+    date?: string;
+    url: string;
+  };
+  details: {
+    background: string;
+    challenge: string;
+    role: string;
+    actions: string[];
+    systemBuilt: string[];
+    result: string;
+    reflection: string;
+  };
+};
+
+const caseStudies: Record<Language, CaseStudy[]> = {
+  zh: [
+    {
+      id: 'gate-domain',
+      company: 'Gate',
+      label: 'Case 01 / 品牌焕新与域名迁移',
+      title: '3 周完成一次全站级品牌切换',
+      summary:
+        'Gate.io 到 Gate.com 牵动 App、官网、活动页、社媒、邮件、客服、帮助中心和多语言站点。我负责把这次高风险切换整理成一套清楚的推进节奏。',
+      role: '项目负责人 / 跨团队协调 / 风险与验收机制设计',
+      metrics: ['3 周完成迁移', '无重大事故', '覆盖多端、多语言、多触点'],
+      tags: ['Brand migration', 'Risk control', 'Cutover governance'],
+      announcement: {
+        label: '官方公告',
+        title: '查看 Gate 品牌焕新公告',
+        date: '2025.05.19',
+        url: 'https://www.gate.com/zh/announcements/article/45055',
+      },
+      details: {
+        background:
+          '我在 Gate 接手的第一场关键项目，是 Gate.io 到 Gate.com 的品牌升级与域名迁移。时间紧，关注度高，窗口期也很短。',
+        challenge:
+          '真正的压力来自触点同步。只要有一个外部入口慢半步，用户就会先看到问题，品牌一致性也会立刻被放大。',
+        role:
+          '我负责统筹触点、切换窗口、验收证据、风险同步和管理层视图，让多个团队按同一套节奏推进。',
+        actions: ['建立全触点清单', '拆分切换窗口和责任人', '用截图和链接作为验收证据', '每日同步风险和遗漏项'],
+        systemBuilt: ['迁移作战表', '触点验收机制', '风险日同步', '管理层进展视图'],
+        result: '三周完成迁移，无重大事故。这件事也让我很快进入 Gate 的业务核心。',
+        reflection:
+          '大型切换项目能稳住，前提是边界、责任和确认方式足够清楚。',
+      },
+    },
+    {
+      id: 'ai-pmo',
+      company: 'Gate',
+      label: 'Case 02 / AI + PMO 自动化',
+      title: '把高频 PMO 工作整理成可复用流程',
+      summary:
+        '多业务线并行后，周报、迭代分析和风险梳理占掉了很多重复时间。我把飞书多维表格、Meegle、MCP 和 AI Skills 接进流程，先整理信息，再由 PM 完成判断，也把 SEO 关键词采集到内容复盘、GDC 设计提需流转等高频工作整理成可复用路径。',
+      role: 'AI PMO 实践者 / 自动化流程设计 / 项目数据分析',
+      metrics: ['周均 200+ 设计需求流转', '周报与分析初稿约 10 分钟生成', '沉淀 AI 辅助 PMO 流程'],
+      tags: ['AI workflow', 'Reporting automation', 'Risk signal'],
+      details: {
+        background:
+          '多业务线并行后，信息流转和汇报成本很快上升。只靠手工整理，很难支撑稳定输出。',
+        challenge:
+          '需求散在不同工具和团队里，周报、Sprint 分析和风险识别都依赖人工汇总，既慢，也容易漏。',
+        role:
+          '我设计并推动一套 AI 辅助流程，把项目数据、需求流转和报告初稿先整理出来，再交给 PM 校准判断。',
+        actions: [
+          '梳理飞书多维表格与 Meegle 数据结构',
+          '用 MCP 和 AI Skills 生成周报与分析初稿',
+          '把 SEO 关键词采集、产文和复盘串成一条增长工作流',
+          '为 GDC 部门搭建设计提需系统与自动化流转路径',
+          '建立风险识别字段和输出模板',
+          '把 PM 判断保留在最终取舍环节',
+        ],
+        systemBuilt: ['设计需求流转看板', 'GDC 设计提需自动化系统', 'SEO 关键词采集到内容复盘工作流', '周报初稿生成流程', 'Sprint 分析模板', '风险识别与升级清单'],
+        result:
+          '这套流程支撑了周均 200+ 设计需求流转，也让周报、迭代分析和风险梳理的初稿更快落地。',
+        reflection:
+          'AI 在这里承担的是整理和归纳。真正的取舍、沟通和推进，还是由人来完成。',
+      },
+    },
+    {
+      id: 'growth-portfolio',
+      company: 'Gate',
+      label: 'Case 03 / 增长项目集管理',
+      title: '把散点增长需求收束成项目组合',
+      summary:
+        'SEO、GEO、ASO 更像一组持续变化的增长项目组合。我建立需求池、排期、风险预警、数据看板和管理层周报，让它们进入同一套管理视图。',
+      role: '增长型 PMO / 项目组合治理 / 管理层汇报',
+      metrics: ['核心指标阶段性显著增长', '部分指标达到翻倍水平', '建立增长项目组合治理机制'],
+      tags: ['SEO / GEO / ASO', 'Portfolio governance', 'Growth PMO'],
+      details: {
+        background:
+          '增长项目往往来源多、变化快，内容、技术、产品、数据和区域团队都会提出需求。',
+        challenge:
+          '如果所有需求都以“紧急”进入队列，团队很快会失去优先级，管理层也难以判断投入是否有效。',
+        role:
+          '我负责把 SEO/GEO/ASO 相关需求整理成项目组合，并建立排期、风险、数据和汇报节奏。',
+        actions: ['建立统一需求池', '按业务目标和资源代价排序', '设置风险预警和依赖跟踪', '沉淀管理层周报和数据看板'],
+        systemBuilt: ['增长需求池', '组合排期机制', '风险预警表', '管理层增长周报'],
+        result:
+          '核心指标在阶段内有明显增长，部分指标达到翻倍，也让增长项目从散点需求变成可治理的组合。',
+        reflection:
+          '增长 PMO 的价值，在于让资源持续投向更值得做的事情，也让团队看清每个需求的代价。',
+      },
+    },
+    {
+      id: 'coins-localization',
+      company: 'Coins.ph',
+      label: 'Case 04 / 多国家本地化与合规',
+      title: '在多国监管条件里找到上线路径',
+      summary:
+        '澳大利亚、巴西、欧洲的上线条件各不相同。监管、KYC、法币链路、钱包隔离和合作方节奏都会改写项目边界。我把这些变化整理成优先级、风险、依赖和下一步责任人。',
+      role: '国际化 PMO / 合规协作 / GTM 项目管理',
+      metrics: ['支持多国家市场拓展', '交付周期缩短约 15%', 'Crypto on Credit 完成上线闭环'],
+      tags: ['Localization', 'Compliance', 'Market expansion'],
+      details: {
+        background:
+          'Coins.ph 阶段的主线，是澳大利亚、巴西、欧洲等市场的国际化拓展。',
+        challenge:
+          '每个市场都有不同的监管判断、KYC 要求、法币链路、钱包隔离和上线验收标准，项目边界会持续变化。',
+        role:
+          '我负责协调产品、研发、合规、法务、运营和外部合作方，把市场进入条件整理成可执行路径。',
+        actions: ['建立优先级对齐机制', '跟踪合规和外部依赖', '用短频会议处理阻塞项', '用 Jira 和异步记录维持执行地图'],
+        systemBuilt: ['市场上线检查清单', '风险与依赖追踪表', '短频同步机制', '上线验收路径'],
+        result:
+          '澳大利亚、巴西、欧洲项目顺利推进，交付周期缩短约 15%，Crypto on Credit 也完成了从方案到上线验收。',
+        reflection:
+          '国际化项目里的路径一直在变化。不同市场会不断改写边界，项目管理要做的是及时跟上。',
+      },
+    },
+    {
+      id: 'binance-fiat',
+      company: 'Binance',
+      label: 'Case 05 / 全球法币支付',
+      title: '让全球支付项目在时区和规则差异中交付',
+      summary:
+        '全球法币支付项目牵动合规、风控、区域业务、运营和研发。时区、工作周和监管判断都会改写交付边界。我用区域窗口、异步记录、E2E 流程、DOD 和升级机制，把分散团队纳入同一套协作秩序。',
+      role: '全球支付 PMO / 跨文化协作 / 敏捷转型',
+      metrics: ['交付 2022 年约 45% 全球法币支付项目', '覆盖亚非拉多区域', '推动 E2E 流程与 DOD'],
+      tags: ['Global delivery', 'Fiat payment', 'Cross-region PMO'],
+      details: {
+        background:
+          'Binance 的法币支付项目处在合规、风控、区域业务、运营和研发的交叉点，覆盖亚非拉等多个区域。',
+        challenge:
+          '全球团队要同时处理时差、地区工作周差异和有限在线窗口。中东地区工作周与其他区域不同，亚非拉在线窗口也不一致，信息如果只靠会议流动，很容易失真。',
+        role:
+          '我负责推动全球法币支付项目交付，并参与团队从单点敏捷实践走向端到端项目管理。',
+        actions: ['按区域设置沟通窗口', '用异步记录保留关键判断', '用 E2E 流程和 DOD 对齐交付标准', '建立风险审计和升级路径'],
+        systemBuilt: ['区域协作节奏', '异步决策记录', 'E2E 项目流程', 'DOD 与风险审计机制'],
+        result:
+          '2022 年我负责交付约 45% 的全球法币支付项目，也推动团队形成了更稳定的跨区域交付标准。',
+        reflection:
+          '全球交付最终靠的是一套稳定秩序，让分散团队也能做判断、承担责任并完成交付。',
+      },
+    },
+  ],
+  en: [
+    {
+      id: 'gate-domain',
+      company: 'Gate',
+      label: 'Case 01 / Brand and domain migration',
+      title: 'A full-site brand cutover completed in three weeks',
+      summary:
+        'The move from Gate.io to Gate.com touched every customer-facing surface: app, website, campaign pages, social channels, email, support, help center, and multilingual pages. I turned that change into a coordinated three-week cutover.',
+      role: 'Project lead / cross-team coordination / risk and validation',
+      metrics: ['Completed in three weeks', 'No major incidents', 'Multi-surface and multilingual scope'],
+      tags: ['Brand migration', 'Risk control', 'Cutover governance'],
+      announcement: {
+        label: 'Official release',
+        title: 'View Gate brand refresh announcement',
+        date: 'May 19, 2025',
+        url: 'https://www.gate.com/announcements/article/45055',
+      },
+      details: {
+        background:
+          'The Gate.io to Gate.com brand and domain migration was one of my first major programs at Gate. It was highly visible from the start and reached across every customer-facing touchpoint.',
+        challenge:
+          'The pressure came from synchronization. One lagging touchpoint could easily become the first thing users noticed.',
+        role:
+          'I coordinated touchpoints, cutover windows, validation evidence, risk reviews, and leadership visibility across teams.',
+        actions: ['Mapped all external touchpoints', 'Defined cutover windows and owners', 'Used screenshots and links as validation evidence', 'Reviewed risks and missed items daily'],
+        systemBuilt: ['Migration control sheet', 'Touchpoint validation flow', 'Daily risk review', 'Leadership progress view'],
+        result:
+          "The migration was completed in three weeks without major incidents, and it gave me a fast entry into Gate's operating core.",
+        reflection:
+          'Large cutovers hold when boundaries, ownership, and validation methods stay clear from start to finish.',
+      },
+    },
+    {
+      id: 'ai-pmo',
+      company: 'Gate',
+      label: 'Case 02 / AI and PMO automation',
+      title: 'Turning repeated PMO work into a reusable workflow',
+      summary:
+        'As more business lines ran in parallel, weekly reporting, sprint analysis, and risk review started to consume the same hours each week. I used Feishu Bitable, Meegle, MCP, and AI Skills to structure the inputs first and keep the final call with PMs, while turning SEO content operations and GDC design intake into reusable workflows.',
+      role: 'AI PMO / workflow design / project data analysis',
+      metrics: ['200+ design requests per week', 'Report and analysis drafts in about 10 minutes', 'AI-assisted PMO workflow built'],
+      tags: ['AI workflow', 'Reporting automation', 'Risk signal'],
+      details: {
+        background:
+          'As more business lines ran in parallel, the cost of collecting, organizing, and reporting information rose quickly.',
+        challenge:
+          'Requests lived across tools and teams. Weekly reports, sprint analysis, and risk detection still depended on manual consolidation.',
+        role:
+          'I designed an AI-assisted workflow that organized project data, demand flow, and report drafts before PM review.',
+        actions: [
+          'Structured Bitable and Meegle data',
+          'Used MCP and AI Skills for report drafts',
+          'Connected keyword collection, content production, and review into one SEO workflow',
+          'Built an automated design intake path for the GDC team',
+          'Defined risk fields and output templates',
+          'Kept human judgment in final trade-offs',
+        ],
+        systemBuilt: ['Design request board', 'GDC design intake automation', 'SEO workflow from keyword collection to content review', 'Weekly report draft flow', 'Sprint analysis template', 'Risk detection checklist'],
+        result:
+          'The workflow supported 200+ design requests per week and made recurring report, sprint, and risk drafts faster and more consistent.',
+        reflection:
+          'AI works best here as operating support. It handles structure and first drafts, while judgment, trade-offs, communication, and follow-through stay with people.',
+      },
+    },
+    {
+      id: 'growth-portfolio',
+      company: 'Gate',
+      label: 'Case 03 / Growth portfolio governance',
+      title: 'Turning scattered growth requests into a portfolio',
+      summary:
+        'SEO, GEO, and ASO never behaved like a single project. I organized them as a portfolio, with demand pools, scheduling, risk alerts, dashboards, and executive reporting.',
+      role: 'Growth PMO / portfolio governance / executive reporting',
+      metrics: ['Clear growth portfolio rhythm', 'Key metrics showed strong stage growth', 'Some metrics reached around 2x'],
+      tags: ['SEO / GEO / ASO', 'Portfolio governance', 'Growth PMO'],
+      details: {
+        background:
+          'Growth requests came from content, product, data, technical, and regional teams, often with competing priorities.',
+        challenge:
+          'Once every request entered the queue as urgent, priority disappeared and leadership lost a clear view of what the investment was producing.',
+        role:
+          'I organized SEO/GEO/ASO work into a governed portfolio with scheduling, risk, data, and reporting routines.',
+        actions: ['Built a shared demand pool', 'Prioritized by goal and resource cost', 'Tracked dependencies and risk alerts', 'Created dashboards and executive weekly reports'],
+        systemBuilt: ['Growth demand pool', 'Portfolio scheduling mechanism', 'Risk alert sheet', 'Executive growth weekly report'],
+        result:
+          'The work supported clear stage growth in key metrics, with some indicators nearly doubling, and turned scattered requests into a governed portfolio.',
+        reflection:
+          'Growth PMO keeps resources tied to the work that matters most and makes the cost of each request visible.',
+      },
+    },
+    {
+      id: 'coins-localization',
+      company: 'Coins.ph',
+      label: 'Case 04 / Localization and compliance',
+      title: 'Finding the launch path across different market rules',
+      summary:
+        'Australia, Brazil, and Europe each came with different launch conditions. Regulation, KYC, fiat rails, wallet setup, partner readiness, and acceptance criteria kept moving the boundary. I turned that shifting ground into priorities, risks, dependencies, and next owners.',
+      role: 'International PMO / compliance coordination / go-to-market delivery',
+      metrics: ['Supported multi-country expansion', 'Delivery cycles shortened by about 15%', 'Crypto on Credit moved from concept to launch'],
+      tags: ['Localization', 'Compliance', 'Market expansion'],
+      details: {
+        background:
+          'At Coins.ph, international expansion meant building launch paths market by market across Australia, Brazil, Europe, and related markets.',
+        challenge:
+          'Each market had its own regulatory judgment, KYC requirements, fiat rails, wallet setup, and launch acceptance standards.',
+        role:
+          'I coordinated product, engineering, compliance, legal, operations, and external partners to shape an executable path.',
+        actions: ['Aligned priorities across teams', 'Tracked compliance and external dependencies', 'Used short-cycle meetings for blockers', 'Kept the execution map in Jira and async records'],
+        systemBuilt: ['Market launch checklist', 'Risk and dependency tracker', 'Short-cycle sync rhythm', 'Launch acceptance path'],
+        result:
+          'The work supported multi-market expansion, shortened delivery cycles by about 15%, and moved Crypto on Credit from concept through launch acceptance.',
+        reflection:
+          'International programs demand constant recalibration. Each market reshapes the delivery path in its own way.',
+      },
+    },
+    {
+      id: 'binance-fiat',
+      company: 'Binance',
+      label: 'Case 05 / Global fiat payments',
+      title: 'Delivering global payments across time zones and rule differences',
+      summary:
+        'Global fiat payment programs sat across compliance, risk, regional business, operations, and engineering. Time zones, different work weeks, and changing regulatory judgment all shaped the delivery boundary. I used regional communication windows, async records, E2E flow, DOD, and escalation paths to give the work a single operating rhythm.',
+      role: 'Global payments PMO / cross-cultural collaboration / agile transformation',
+      metrics: ['Delivered around 45% of 2022 global fiat payment programs', 'Covered APAC, Africa, and LATAM', 'Landed E2E flow and DOD'],
+      tags: ['Global delivery', 'Fiat payment', 'Cross-region PMO'],
+      details: {
+        background:
+          'Binance fiat payment programs sat across compliance, risk, regional business, operations, and engineering, covering multiple regions at once.',
+        challenge:
+          'The work involved time zones, different weekend patterns across regions, including the Middle East, and very limited overlapping hours.',
+        role:
+          'I drove delivery for global fiat payment programs and helped the team move from isolated agile practices into end-to-end program management.',
+        actions: ['Set regional communication windows', 'Kept async records for key decisions', 'Aligned delivery through E2E flow and DOD', 'Built risk review and escalation paths'],
+        systemBuilt: ['Regional collaboration rhythm', 'Async decision records', 'E2E project flow', 'DOD and risk audit mechanism'],
+        result:
+          'In 2022, I delivered around 45% of global fiat payment programs and helped establish a more stable cross-region delivery standard.',
+        reflection:
+          'Global delivery depends on a reliable operating order. Distributed teams need enough context to make decisions, take ownership, and deliver.',
+      },
+    },
+  ],
+};
+
+const experiences = {
+  zh: [
+    {
+      company: 'Gate',
+      period: '2025 - 2026.04',
+      website: 'https://www.gate.com/',
+      role: 'P8 PMO / 多业务线项目管理负责人',
+      summary: 'Gate.com 迁移、多业务线治理、RDER 部门项目管理、Card 业务、AI PMO 工作流。',
+      paragraphs: [
+        'Gate 的第一场重要项目，是 Gate.io 到 Gate.com 的品牌升级与域名迁移。项目发生在入职早期，时间紧、触点多，涉及 App、官网、活动页、社媒、邮件、客服、帮助中心和多语言站点。它看起来是一次域名切换，实际考验的是切换节奏、风险控制和跨团队协同。',
+        '我把项目拆成触点清单、切换窗口、验收截图和每日风险同步，确保每个团队知道自己负责什么、什么时候完成、如何确认结果。三周内完成迁移且无重大事故，也让我很快进入 Gate 的业务核心。',
+        '后续我的职责扩展到 RDER 一级部门的项目管理工作，包括 PM 分工、需求推进、状态看板、复盘和绩效反馈；同时我也直接负责 Card 业务项目。域名迁移中形成的节奏，逐渐延展成多项目组合治理的方法：让进展、风险、资源和关键判断持续被看见。',
+      ],
+      outcomes: ['3 周内完成迁移且无重大事故', 'SEO / GEO / ASO 项目组合治理', 'AI PMO 报告与风险识别提效'],
+    },
+    {
+      company: 'Coins.ph',
+      period: '2024 - 2025',
+      website: 'https://coins.ph/',
+      role: 'PMO / 国际化业务项目管理',
+      summary: '澳大利亚、巴西、欧洲市场拓展，本地化、合规接入、KYC、Crypto on Credit。',
+      paragraphs: [
+        'Coins.ph 阶段让国际化从概念变成一组具体约束。每个市场背后都有监管路径、法币链路、KYC、钱包隔离、运营准备和上线验收。',
+        '澳大利亚、巴西、欧洲项目同时推进时，团队面对的是一组不断变化的前置条件：合规判断、合作方准备度和研发优先级都在持续调整。',
+        '这些不确定性被整理成优先级、风险、依赖和下一步责任人，再通过短频会议、异步同步和 Jira 机制进入同一张执行地图。',
+      ],
+      outcomes: ['交付周期缩短约 15%', 'Crypto on Credit 完成从方案到上线闭环', '建立跨团队异步协作节奏'],
+    },
+    {
+      company: 'Binance',
+      period: '2021 - 2023',
+      website: 'https://www.binance.com/',
+      role: 'PMO / 全球支付与敏捷转型',
+      summary: '全球法币支付、跨区域交付、合规风控协同、E2E 流程与 DOD。',
+      paragraphs: [
+        'Binance 是我建立全球交付能力的关键阶段。法币支付项目连接合规、风控、区域业务、运营和研发，任何一方判断变化，都会影响项目边界。2022 年我负责交付了约 45% 的全球法币支付项目，背后依赖的是对节奏、信息和风险的管理。',
+        '全球团队同时面对时差、地区工作周差异和有限在线窗口。中东地区的工作周与其他区域不同，亚非拉团队的在线窗口也不一致。一个问题如果只靠会议推进，很容易在等待中失真，或者在上线前才集中爆发。',
+        '我把协作拆成更稳定的机制：按区域设置沟通窗口，用异步记录保留关键判断，用 E2E 流程和 DOD 对齐交付标准，用风险审计和升级路径确保问题进入正确层级。这段经历让我形成了更清晰的项目观：全球交付需要一套可靠的协作秩序，让分散的团队可以做判断、承担责任并完成交付。',
+      ],
+      outcomes: ['交付 2022 年约 45% 全球法币支付项目', '推动 E2E 流程和 DOD 落地', '减少跨区域信息延迟'],
+    },
+    {
+      company: 'Ctrip.com',
+      period: '2019 - 2021',
+      website: 'https://www.ctrip.com/',
+      role: '项目经理 / ROI 委员会与研发效能',
+      summary: 'ROI 评审、自由行 DP、交易中台、会计结算中台、研发效能分析。',
+      paragraphs: [
+        '携程阶段把项目管理的重心从执行推进，前移到价值判断。一个需求为什么值得做，资源应该投向哪里，是这一阶段最先要回答的问题。',
+        'ROI 委员会相关评审要求产品、研发和项目管理一起看真实业务价值、投入产出和优先级，需求描述只是起点。',
+        '变更率、延期率、资源投入和交付质量等研发效能分析，以及交易中台、会计结算中台的敏捷转型和 OKR 对齐，共同形成了更数据化的项目视角。',
+      ],
+      outcomes: ['建立研发效能分析视角', '参与 ROI 委员会需求评审', '形成先问价值再排项目的习惯'],
+    },
+    {
+      company: 'WeWork',
+      period: '2018 - 2019',
+      website: 'https://www.wework.com/',
+      role: '项目经理',
+      summary: '应用端、网页端、小程序项目范围定义，Scrum / Kanban / Jira / Confluence。',
+      paragraphs: [
+        'WeWork 是我早期接触创新业务的现场。需求变化快，团队需要在快速验证和按时交付之间保持平衡。',
+        '应用端、网页端、小程序项目的范围定义，以及产品、设计、研发和运营之间的信息协调，构成了早期跨职能协作基础；“WeWork 闪座”项目也强化了 0-1 交付意识。',
+      ],
+      outcomes: ['积累敏捷协作经验', '参与创新项目从 0 到 1 交付', '建立跨职能沟通基础'],
+    },
+    {
+      company: 'HAND',
+      period: '2016 - 2018',
+      website: 'https://www.hand-china.com/',
+      role: 'QA Engineer',
+      summary: '企业级项目交付、需求分析、测试验证、缺陷闭环。',
+      paragraphs: [
+        'HAND 是我进入企业级交付体系的起点。QA 工作让我从需求、实现、验证到上线去看一个项目，也让我更早形成了质量意识。',
+        'K12 项目从需求分析、测试执行到上线交付的全过程，以及缺陷修复和上线前验证，构成了后续项目管理能力里的质量意识和全链路视角。',
+      ],
+      outcomes: ['建立质量和验证意识', '理解企业项目实施流程', '形成全链路交付视角'],
+    },
+  ],
+  en: [
+    {
+      company: 'Gate',
+      period: '2025 - Apr 2026',
+      website: 'https://www.gate.com/',
+      role: 'P8 PMO / Multi-business Program Lead',
+      summary: 'Gate.com migration, multi-business PMO governance, RDER department project management, Card business, and AI PMO workflows.',
+      paragraphs: [
+        'My first major project at Gate was the Gate.io to Gate.com brand and domain migration. It came early in my role, with a tight timeline and a wide touchpoint surface: app, website, campaign pages, social channels, email, support, help center, and multilingual sites. The work depended on cutover rhythm, risk control, and cross-team coordination.',
+        "I broke the work into touchpoint maps, cutover windows, screenshot checks, and daily risk reviews. Each team knew its owner, deadline, and validation method. The migration was completed in three weeks without major incidents, and it brought me straight into Gate's operating core.",
+        'Later, my scope expanded to project management for the RDER department, including PM allocation, demand follow-up, status dashboards, retrospectives, and performance feedback. I also directly owned Card business programs. The rhythm built during the migration became the basis for a broader portfolio governance approach: making progress, risk, resources, and key decisions visible.',
+      ],
+      outcomes: ['Completed migration in three weeks without major incidents', 'Supported SEO / GEO / ASO portfolio governance', 'Reduced reporting and risk detection cycles with AI PMO'],
+    },
+    {
+      company: 'Coins.ph',
+      period: '2024 - 2025',
+      website: 'https://coins.ph/',
+      role: 'PMO / International Business Programs',
+      summary: 'Australia, Brazil, and Europe expansion, localization, compliance integration, KYC, and Crypto on Credit.',
+      paragraphs: [
+        'At Coins.ph, international expansion stopped being a broad ambition and became a set of hard constraints. Each market came with its own regulatory path, fiat flow, KYC rules, wallet setup, launch criteria, and operating readiness.',
+        'Australia, Brazil, and Europe moved in parallel. There was no single template to follow. Compliance judgment, partner readiness, and engineering priority kept changing.',
+        'Those moving parts became priorities, risks, dependencies, and next owners. Short-cycle meetings, async updates, and Jira kept everyone working from the same execution map.',
+      ],
+      outcomes: ['Shortened delivery cycles by about 15%', 'Moved Crypto on Credit from concept to launch acceptance', 'Built a cross-functional async rhythm'],
+    },
+    {
+      company: 'Binance',
+      period: '2021 - 2023',
+      website: 'https://www.binance.com/',
+      role: 'PMO / Global Fiat Payments',
+      summary: 'Global fiat payments, cross-region delivery, compliance and risk collaboration, E2E flow, and DOD.',
+      paragraphs: [
+        'Binance was a defining stage in my global delivery work. Fiat payment programs connected compliance, risk, regional business, operations, and engineering. A change in any one area could shift the program boundary. In 2022, I delivered around 45% of global fiat payment programs, which required steady control over rhythm, information, and risk.',
+        'The work involved time zones, different weekend patterns across regions, including the Middle East, and limited overlapping hours across APAC, Africa, and LATAM. If issues moved only through meetings, context could be lost or arrive too late.',
+        'I built a more stable operating rhythm: regional communication windows, async records for key decisions, E2E flow and DOD for delivery standards, and risk review with clear escalation paths. That experience shaped how I think about global delivery: distributed teams need enough context and a reliable operating order to make judgments, own decisions, and deliver.',
+      ],
+      outcomes: ['Delivered about 45% of 2022 global fiat payment programs', 'Landed E2E flow and DOD', 'Improved cross-region information flow'],
+    },
+    {
+      company: 'Ctrip.com',
+      period: '2019 - 2021',
+      website: 'https://www.ctrip.com/',
+      role: 'Project Manager / ROI Review & Engineering Efficiency',
+      summary: 'ROI review, independent travel, transaction platform, accounting settlement platform, and engineering efficiency.',
+      paragraphs: [
+        'At Ctrip, project management moved upstream into value judgment. The first question was straightforward: why should this request receive resources?',
+        'ROI committee reviews brought product, engineering, and project management into the same discussion, with attention on business value, return, and priority.',
+        'I also worked with change rate, delay rate, resource input, and delivery quality. Those metrics, together with agile transformation and OKR alignment, built a more data-informed view of project work.',
+      ],
+      outcomes: ['Built an engineering efficiency perspective', 'Participated in ROI committee reviews', 'Formed the habit of asking value before sequencing work'],
+    },
+    {
+      company: 'WeWork',
+      period: '2018 - 2019',
+      website: 'https://www.wework.com/',
+      role: 'Project Manager',
+      summary: 'App, web, and mini-program scope definition with Scrum, Kanban, Jira, and Confluence.',
+      paragraphs: [
+        'WeWork was an early test of project work in a fast-moving product environment. Requirements changed quickly, and teams had to balance fast validation with committed delivery.',
+        'App, web, and mini-program projects built my early cross-functional foundation. The first WeWork hot desk project also sharpened my understanding of early-stage delivery.',
+      ],
+      outcomes: ['Built agile collaboration habits', 'Participated in early 0-1 delivery', 'Strengthened cross-functional communication'],
+    },
+    {
+      company: 'HAND',
+      period: '2016 - 2018',
+      website: 'https://www.hand-china.com/',
+      role: 'QA Engineer',
+      summary: 'Enterprise delivery, requirement analysis, test validation, and defect closure.',
+      paragraphs: [
+        'HAND was my entry point into enterprise delivery. QA work taught me to see a project end to end: requirements, implementation, validation, and launch.',
+        'The K12 project covered requirement analysis, testing, go-live, defect resolution, and pre-launch checks. It gave me the quality discipline that later carried into my project management work.',
+      ],
+      outcomes: ['Built quality and validation discipline', 'Understood enterprise implementation flow', 'Formed a full-chain delivery view'],
+    },
+  ],
+};
+
+const education = [
+  {
+    school: 'Tianfu College of SWUFE',
+    zh: '西南财经大学天府学院',
+    website: 'https://www.tfswufe.edu.cn/',
+    mark: 'tianfu',
+    zhPhase: '起点',
+    enPhase: 'Starting Point',
+    zhLead: '更早的审计学习，让我先形成了结构感、严谨性和判断习惯，也影响了后来处理复杂项目的方式。',
+    enLead: 'My auditing studies gave me early habits of structure, discipline, and evidence-based judgment that later shaped how I handled complex programs.',
+    zhDegree: '本科｜审计学',
+    enDegree: 'Bachelor | Auditing',
+    zhLocation: '中国｜成都',
+    enLocation: 'Chengdu, China',
+    period: '2012 - 2016',
+  },
+  {
+    school: 'The University of Manchester',
+    zh: '曼彻斯特大学',
+    website: 'https://www.manchester.ac.uk/',
+    mark: 'manchester',
+    zhPhase: '进阶',
+    enPhase: 'Graduate Study',
+    zhLead: '商业项目管理这段学习经历，承接了我早期的项目实践，也让我更系统地理解项目方法、业务判断与组织协同之间的关系。',
+    enLead: 'Commercial Project Management built on my early project experience and gave me a more structured understanding of project method, business judgment, and organizational coordination.',
+    zhTag: 'QS 2026 全球第 35',
+    enTag: 'QS 2026 #35 Worldwide',
+    zhDegree: '硕士｜商业项目管理',
+    enDegree: 'MSc | Commercial Project Management',
+    zhLocation: '英国｜曼彻斯特',
+    enLocation: 'Manchester, United Kingdom',
+    period: '2018 - 2019',
+  },
+];
+
+const signalIcons = [Target, ShieldCheck, Layers3, Sparkles];
+
+function BrandLogo({ company, size = 'md' }: { company: string; size?: 'sm' | 'md' | 'lg' }) {
+  const brand = brandLogoAssets[company as BrandName] ?? {
+    src: '',
+    bg: '#ffffff',
+    border: 'rgba(244, 241, 232, 0.28)',
+    shadow: '0 18px 48px rgba(244, 241, 232, 0.10)',
+    pad: '12px',
+  };
+  const sizes = {
+    sm: 'h-10 w-[4.8rem] rounded-xl',
+    md: 'h-12 w-[6.25rem] rounded-2xl',
+    lg: 'h-16 w-[8.7rem] rounded-[1.35rem]',
+  };
+
+  return (
+    <span
+      className={`brand-logo-frame inline-flex shrink-0 items-center justify-center border ${sizes[size]}`}
+      style={{ background: brand.bg, borderColor: brand.border, boxShadow: brand.shadow, padding: brand.pad }}
+      aria-hidden="true"
+    >
+      {brand.src ? (
+        <img className="brand-logo-image" src={brand.src} alt="" loading="lazy" decoding="async" />
+      ) : (
+        company.slice(0, 1)
+      )}
+    </span>
+  );
+}
+
+function SchoolLogo({ mark }: { mark: keyof typeof schoolLogoAssets }) {
+  const school = schoolLogoAssets[mark];
+
+  return (
+    <span
+      className="school-logo-frame inline-flex h-20 w-48 shrink-0 items-center justify-center rounded-[1.35rem] border"
+      style={{ background: school.bg, borderColor: school.border, padding: school.pad, boxShadow: '0 18px 48px rgba(0, 0, 0, 0.22)' }}
+      aria-hidden="true"
+    >
+      <img className="school-logo-image" src={school.src} alt="" loading="lazy" decoding="async" />
+    </span>
+  );
+}
+
+function ThemeToggle({
+  theme,
+  isZh,
+  onChange,
+}: {
+  theme: Theme;
+  isZh: boolean;
+  onChange: (theme: Theme) => void;
+}) {
+  return (
+    <div className="theme-toggle" role="group" aria-label={isZh ? '主题切换' : 'Theme switch'}>
+      <button
+        type="button"
+        className={theme === 'dark' ? 'is-active' : ''}
+        aria-label={isZh ? '深色主题' : 'Dark theme'}
+        aria-pressed={theme === 'dark'}
+        onClick={() => onChange('dark')}
+      >
+        ◐
+      </button>
+      <button
+        type="button"
+        className={theme === 'light' ? 'is-active' : ''}
+        aria-label={isZh ? '浅色主题' : 'Light theme'}
+        aria-pressed={theme === 'light'}
+        onClick={() => onChange('light')}
+      >
+        ◌
+      </button>
+    </div>
+  );
+}
+
+function renderInlineMarkdown(text: string, keyPrefix = 'inline') {
+  const nodes: Array<string | JSX.Element> = [];
+  const pattern = /(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|`([^`]+)`|\*\*([^*]+)\*\*)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let index = 0;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+
+    if (match[2] && match[3]) {
+      nodes.push(
+        <a key={`${keyPrefix}-link-${index}`} href={match[3]} target="_blank" rel="noreferrer">
+          {match[2]}
+        </a>,
+      );
+    } else if (match[4]) {
+      nodes.push(<code key={`${keyPrefix}-code-${index}`}>{match[4]}</code>);
+    } else if (match[5]) {
+      nodes.push(<strong key={`${keyPrefix}-strong-${index}`}>{match[5]}</strong>);
+    }
+
+    lastIndex = pattern.lastIndex;
+    index += 1;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes;
+}
+
+function renderMarkdownDocument(markdown: string) {
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+  const blocks: JSX.Element[] = [];
+  let i = 0;
+
+  const isTableDivider = (line: string) => /^\|?[\s:-]+\|[\s|:-]*$/.test(line.trim());
+  const parseTableRow = (line: string) =>
+    line
+      .trim()
+      .replace(/^\|/, '')
+      .replace(/\|$/, '')
+      .split('|')
+      .map((cell) => cell.trim());
+
+  while (i < lines.length) {
+    const raw = lines[i];
+    const line = raw.trim();
+
+    if (!line) {
+      i += 1;
+      continue;
+    }
+
+    if (line.startsWith('```')) {
+      const fence = line.slice(3).trim();
+      const codeLines: string[] = [];
+      i += 1;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        codeLines.push(lines[i]);
+        i += 1;
+      }
+      i += 1;
+      const codeContent = codeLines.join('\n');
+      const isZhRequestJourneyDiagram =
+        !fence && codeContent.includes('你输入域名') && codeContent.includes('DNS（域名→IP）') && codeContent.includes('Nginx（Web服务器）');
+      const isEnRequestJourneyDiagram =
+        !fence && codeContent.includes('You enter a domain') && codeContent.includes('DNS (domain to IP)') && codeContent.includes('Nginx (web server)');
+      const isRequestJourneyDiagram = isZhRequestJourneyDiagram || isEnRequestJourneyDiagram;
+
+      const isZhBuildFlowDiagram =
+        !fence && codeContent.includes('买 CVM') && codeContent.includes('买域名') && codeContent.includes('提交备案') && codeContent.includes('完工');
+      const isEnBuildFlowDiagram =
+        !fence && codeContent.includes('Buy CVM') && codeContent.includes('Buy domain') && codeContent.includes('Submit filing') && codeContent.includes('Done');
+      const isBuildFlowDiagram = isZhBuildFlowDiagram || isEnBuildFlowDiagram;
+      const diagramSteps =
+        !fence && !isRequestJourneyDiagram && !isBuildFlowDiagram && codeContent.includes('→')
+          ? codeContent
+              .split('→')
+              .map((part) => part.trim())
+              .filter(Boolean)
+          : null;
+
+      if (isRequestJourneyDiagram) {
+        const requestDiagramCopy = isZhRequestJourneyDiagram
+          ? {
+              inputLabel: '你输入',
+              inputValue: 'www.baixi.xyz',
+              dnsTitle: 'DNS 服务器',
+              dnsSub: 'DNSPod',
+              dnsMeta: '查 A 记录',
+              dnsValue: 'www -> 124.220.6.3',
+              serverTitle: '你的服务器',
+              serverIp: '124.220.6.3',
+              serverMeta: 'CVM 上海',
+              caption: 'DNS 可以理解成把域名翻译成服务器地址的那一层。',
+            }
+          : {
+              inputLabel: 'You enter',
+              inputValue: 'www.baixi.xyz',
+              dnsTitle: 'DNS server',
+              dnsSub: 'DNSPod',
+              dnsMeta: 'Looks up the A record',
+              dnsValue: 'www -> 124.220.6.3',
+              serverTitle: 'Your server',
+              serverIp: '124.220.6.3',
+              serverMeta: 'CVM Shanghai',
+              caption: 'DNS is the layer that turns a domain name into a server address.',
+            };
+
+        blocks.push(
+          <div key={`request-diagram-${blocks.length}`} className="journal-request-diagram">
+            <div className="journal-request-diagram-grid">
+              <div className="journal-request-node journal-request-node-input">
+                <span className="journal-request-node-label">{requestDiagramCopy.inputLabel}</span>
+                <strong>{requestDiagramCopy.inputValue}</strong>
+              </div>
+
+              <div className="journal-request-arrow" aria-hidden="true">
+                <span />
+              </div>
+
+              <div className="journal-request-node journal-request-node-dns">
+                <strong>{requestDiagramCopy.dnsTitle}</strong>
+                <small>{requestDiagramCopy.dnsSub}</small>
+                <span className="journal-request-node-meta">{requestDiagramCopy.dnsMeta}</span>
+                <em>{requestDiagramCopy.dnsValue}</em>
+              </div>
+
+              <div className="journal-request-arrow" aria-hidden="true">
+                <span />
+              </div>
+
+              <div className="journal-request-node journal-request-node-server">
+                <strong>{requestDiagramCopy.serverTitle}</strong>
+                <small>{requestDiagramCopy.serverIp}</small>
+                <span className="journal-request-node-meta">{requestDiagramCopy.serverMeta}</span>
+              </div>
+            </div>
+
+            <p className="journal-request-caption">{requestDiagramCopy.caption}</p>
+          </div>,
+        );
+        continue;
+      }
+
+      if (isBuildFlowDiagram) {
+        const buildFlowAsset = isZhBuildFlowDiagram
+          ? {
+              src: '/journal-diagrams/baixi-build-flow.zh.svg',
+              alt: '建站流程图',
+            }
+          : {
+              src: '/journal-diagrams/baixi-build-flow.en.svg',
+              alt: 'Build flow diagram',
+            };
+
+        blocks.push(
+          <figure key={`build-flow-${blocks.length}`} className="journal-build-figure">
+            <img src={buildFlowAsset.src} alt={buildFlowAsset.alt} loading="lazy" decoding="async" />
+          </figure>,
+        );
+        continue;
+      }
+
+      if (diagramSteps && diagramSteps.length > 1) {
+        blocks.push(
+          <div key={`flow-${blocks.length}`} className="journal-md-flow">
+            {diagramSteps.map((step, idx) => (
+              <div key={`flow-step-${idx}`} className="journal-md-flow-step">
+                <span>{step}</span>
+                {idx < diagramSteps.length - 1 ? <ArrowRight className="h-4 w-4" /> : null}
+              </div>
+            ))}
+          </div>,
+        );
+        continue;
+      }
+
+      blocks.push(
+        <pre key={`code-${blocks.length}`} className="journal-md-pre">
+          {fence ? <span className="journal-md-code-label">{fence}</span> : null}
+          <code>{codeContent}</code>
+        </pre>,
+      );
+      continue;
+    }
+
+    if (/^---+$/.test(line)) {
+      blocks.push(<hr key={`hr-${blocks.length}`} className="journal-md-hr" />);
+      i += 1;
+      continue;
+    }
+
+    const headingMatch = raw.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      const level = Math.min(6, headingMatch[1].length);
+      const text = headingMatch[2].trim();
+      const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+      blocks.push(<Tag key={`h-${blocks.length}`}>{renderInlineMarkdown(text, `h-${blocks.length}`)}</Tag>);
+      i += 1;
+      continue;
+    }
+
+    if (line.startsWith('>')) {
+      const quoteLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('>')) {
+        quoteLines.push(lines[i].trim().replace(/^>\s?/, ''));
+        i += 1;
+      }
+      const paragraphs = quoteLines.join('\n').split(/\n{2,}/).map((part) => part.trim()).filter(Boolean);
+      blocks.push(
+        <blockquote key={`quote-${blocks.length}`}>
+          {paragraphs.map((part, idx) => (
+            <p key={`quote-p-${idx}`}>{renderInlineMarkdown(part, `quote-${blocks.length}-${idx}`)}</p>
+          ))}
+        </blockquote>,
+      );
+      continue;
+    }
+
+    if (line.includes('|') && i + 1 < lines.length && isTableDivider(lines[i + 1])) {
+      const tableLines: string[] = [raw];
+      i += 2;
+      while (i < lines.length && lines[i].trim().includes('|') && lines[i].trim()) {
+        tableLines.push(lines[i]);
+        i += 1;
+      }
+      const [headerLine, ...bodyLines] = tableLines;
+      const headers = parseTableRow(headerLine);
+      const rows = bodyLines.map(parseTableRow);
+      blocks.push(
+        <div key={`table-${blocks.length}`} className="journal-md-table-wrap">
+          <table className="journal-md-table">
+            <thead>
+              <tr>
+                {headers.map((cell, idx) => (
+                  <th key={`th-${idx}`}>{renderInlineMarkdown(cell, `th-${idx}`)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, rowIndex) => (
+                <tr key={`tr-${rowIndex}`}>
+                  {row.map((cell, cellIndex) => (
+                    <td key={`td-${rowIndex}-${cellIndex}`}>{renderInlineMarkdown(cell, `td-${rowIndex}-${cellIndex}`)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>,
+      );
+      continue;
+    }
+
+    if (/^[-*]\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^[-*]\s+/, ''));
+        i += 1;
+      }
+      blocks.push(
+        <ul key={`ul-${blocks.length}`}>
+          {items.map((item, idx) => (
+            <li key={`li-${idx}`}>{renderInlineMarkdown(item, `ul-${blocks.length}-${idx}`)}</li>
+          ))}
+        </ul>,
+      );
+      continue;
+    }
+
+    if (/^\d+[.)]\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\d+[.)]\s+/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^\d+[.)]\s+/, ''));
+        i += 1;
+      }
+      blocks.push(
+        <ol key={`ol-${blocks.length}`}>
+          {items.map((item, idx) => (
+            <li key={`oli-${idx}`}>{renderInlineMarkdown(item, `ol-${blocks.length}-${idx}`)}</li>
+          ))}
+        </ol>,
+      );
+      continue;
+    }
+
+    const paragraphLines: string[] = [raw.trim()];
+    i += 1;
+    while (
+      i < lines.length &&
+      lines[i].trim() &&
+      !lines[i].trim().startsWith('```') &&
+      !/^#{1,6}\s+/.test(lines[i]) &&
+      !/^---+$/.test(lines[i].trim()) &&
+      !lines[i].trim().startsWith('>') &&
+      !/^[-*]\s+/.test(lines[i].trim()) &&
+      !/^\d+[.)]\s+/.test(lines[i].trim()) &&
+      !(lines[i].trim().includes('|') && i + 1 < lines.length && isTableDivider(lines[i + 1]))
+    ) {
+      paragraphLines.push(lines[i].trim());
+      i += 1;
+    }
+
+    blocks.push(
+      <p key={`p-${blocks.length}`}>{renderInlineMarkdown(paragraphLines.join(' '), `p-${blocks.length}`)}</p>,
+    );
+  }
+
+  return blocks;
+}
+
+export default function App() {
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window === 'undefined') {
+      return 'zh';
+    }
+
+    try {
+      const savedLanguage = window.localStorage.getItem('cyril-site-language');
+      return savedLanguage === 'zh' || savedLanguage === 'en' ? savedLanguage : 'zh';
+    } catch {
+      return 'zh';
+    }
+  });
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === 'undefined') {
+      return 'dark';
+    }
+
+    try {
+      const savedTheme = window.localStorage.getItem('cyril-site-theme');
+      return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+  const [expandedCase, setExpandedCase] = useState<string | null>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const t = content[language];
+  const isZh = language === 'zh';
+  const selectedJourney = journey[language];
+  const method = methodCards[language];
+  const journal = journalEntries[language];
+  const cases = caseStudies[language];
+  const themeClass = theme === 'light' ? 'theme-light' : 'theme-dark';
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const journalArticleMatch = pathname.match(/^\/journal\/([^/]+)$/);
+  const journalArticleSlug = journalArticleMatch?.[1] ?? null;
+  const isJournalPage = pathname === '/journal';
+  const currentJournalArticle =
+    journalArticleSlug
+      ? journal.find((entry) => entry.slug === journalArticleSlug) ??
+        journalEntries.zh.find((entry) => entry.slug === journalArticleSlug) ??
+        null
+      : null;
+  const heroStageStyle: CSSProperties = {
+    minHeight: '100dvh',
+  };
+
+  useEffect(() => {
+    setExpandedCase(null);
+  }, [language]);
+
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [language, theme, pathname]);
+
+  useEffect(() => {
+    const syncNavState = () => {
+      if (window.innerWidth > 719) {
+        setMobileNavOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', syncNavState);
+    return () => window.removeEventListener('resize', syncNavState);
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('cyril-site-language', language);
+    } catch {
+      return;
+    }
+  }, [language]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+
+    try {
+      window.localStorage.setItem('cyril-site-theme', theme);
+    } catch {
+      return;
+    }
+
+    return () => {
+      delete root.dataset.theme;
+    };
+  }, [theme]);
+
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [language]);
+
+  const navLinks = nav[language].map(([label, href], index) => (
+    <a
+      key={href}
+      href={href}
+      className={`nav-link ${index === 0 ? 'is-active' : ''}`}
+      onClick={() => setMobileNavOpen(false)}
+    >
+      <strong>{label}</strong>
+    </a>
+  ));
+
+  if (isJournalPage || currentJournalArticle) {
+    return (
+      <main className={`site-shell journal-page min-h-screen ${themeClass} ${isZh ? 'site-zh' : 'site-en'}`}>
+        <div className="hero-grid" />
+        <header className="site-header journal-header relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
+          <a href="/#top" className="identity-lockup" aria-label={isZh ? '回到首页' : 'Back home'}>
+            <span className="identity-mark">CL</span>
+            <span className="identity-text">
+              <strong>{isZh ? '刘柏希' : 'Cyril Liu'}</strong>
+              <small>{isZh ? '返回首页' : 'Back home'}</small>
+            </span>
+          </a>
+          <div className="header-controls">
+            <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
+            <button
+              type="button"
+              onClick={() => setLanguage((current) => (current === 'zh' ? 'en' : 'zh'))}
+              className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
+              aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
+            >
+              <span>中</span>
+              <span>EN</span>
+            </button>
+          </div>
+        </header>
+
+        <section className="journal-page-shell mx-auto max-w-7xl px-6 pb-24 pt-16 sm:px-8">
+          {currentJournalArticle ? (
+            <>
+              <p className="section-kicker">{isZh ? '原文正文' : 'Article'}</p>
+              <div className="journal-article-head journal-article-page-head">
+                <div>
+                  <h1>{currentJournalArticle.title}</h1>
+                  <p className="journal-article-summary">{currentJournalArticle.summary}</p>
+                </div>
+                <div className="journal-article-tools">
+                  <span className="journal-article-date">{currentJournalArticle.date}</span>
+                </div>
+              </div>
+              <article key={`${language}-${currentJournalArticle.slug}`} className="journal-article journal-article-page mt-12">
+                <div className="journal-md">{currentJournalArticle.body ? renderMarkdownDocument(currentJournalArticle.body) : null}</div>
+              </article>
+            </>
+          ) : journal.length > 0 ? (
+            <>
+              <p className="section-kicker">{t.journalKicker}</p>
+              <h1>{t.journalTitle}</h1>
+              <p>{t.journalIntro}</p>
+              <div className="journal-list mt-12">
+                {journal.slice(0, 5).map((entry) => (
+                  <a key={`${entry.slug}-${entry.title}`} href={`/journal/${entry.slug}`} className="journal-card journal-card-link">
+                    <div className="journal-card-meta">
+                      <span>{entry.tag}</span>
+                      <small>{entry.date}</small>
+                    </div>
+                    <h3>{entry.title}</h3>
+                    <p>{entry.summary}</p>
+                    <div className="journal-card-footer">
+                      <Code2 className="h-4 w-4" />
+                      <span>{isZh ? '阅读全文' : 'Read article'}</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="journal-empty">
+              <BookOpen className="h-6 w-6" />
+              <span>{isZh ? '第一篇内容准备中。' : 'The first note is being prepared.'}</span>
+            </div>
+          )}
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className={`site-shell min-h-screen ${themeClass} ${isZh ? 'site-zh' : 'site-en'}`}>
+      <header className="site-header site-header-sticky" data-mobile-open={mobileNavOpen ? 'true' : 'false'}>
+        <div className="site-header-primary">
+          <a href="#top" className="identity-lockup" aria-label={isZh ? '刘柏希首页' : 'Cyril Liu home'}>
+            <span className="identity-mark">CL</span>
+            <span className="identity-text">
+              <strong>{isZh ? '刘柏希' : 'Cyril Liu'}</strong>
+              <small>{isZh ? 'PMO / 项目集管理' : 'PMO / Program Management'}</small>
+            </span>
+          </a>
+          <nav className="site-nav site-nav-inline" aria-label={isZh ? '主导航' : 'Primary navigation'}>
+            {navLinks}
+          </nav>
+          <div className="header-controls">
+            <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
+            <button
+              type="button"
+              onClick={() => setLanguage((current) => (current === 'zh' ? 'en' : 'zh'))}
+              className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
+              aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
+            >
+              <span>中</span>
+              <span>EN</span>
+            </button>
+            <button
+              type="button"
+              className={`header-menu-toggle ${mobileNavOpen ? 'is-open' : ''}`}
+              aria-label={isZh ? '打开目录' : 'Open menu'}
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((current) => !current)}
+            >
+              {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              <span>{isZh ? '目录' : 'Menu'}</span>
+            </button>
+          </div>
+        </div>
+        <nav className={`site-nav site-nav-panel ${mobileNavOpen ? 'is-open' : ''}`} aria-label={isZh ? '主导航' : 'Primary navigation'}>
+          <div className="site-nav-panel-tools">
+            <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
+            <button
+              type="button"
+              onClick={() => setLanguage((current) => (current === 'zh' ? 'en' : 'zh'))}
+              className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
+              aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
+            >
+              <span>中</span>
+              <span>EN</span>
+            </button>
+          </div>
+          {navLinks}
+        </nav>
+      </header>
+
+      <div className="site-content-shell">
+        <section id="top" className="hero-shell page-section relative isolate min-h-dvh overflow-hidden">
+          <div className="hero-scrim" />
+          <div className="hero-grid" />
+
+          <div className="hero-stage relative z-10 mx-auto grid w-full max-w-7xl items-end gap-8 px-6 pb-14 pt-4 sm:px-8" style={heroStageStyle}>
+            <div className="hero-copy max-w-5xl">
+              <p className="hero-greeting" aria-label={`${t.greetingLead}${t.greetingFocus}`}>
+                <span>{t.greetingLead}</span>
+                <span>{t.greetingFocus}</span>
+              </p>
+              <h1 className="hero-name">{t.name}</h1>
+              <p className="hero-role-line">{t.role}</p>
+              <p className="hero-manifesto">{t.manifesto}</p>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <a href="#case-studies" className="hero-action hero-action-primary">
+                  {t.primary}
+                  <ArrowRight className="h-5 w-5" />
+                </a>
+                <a href="#contact" className="hero-action hero-action-secondary">
+                  {t.secondary}
+                </a>
+              </div>
+              <a href="/journal" className="hero-journal-link">
+                <BookOpen className="h-4 w-4" />
+                <span>{isZh ? '学习日志：Vibe Coding 与 AI PMO 记录' : 'Working Notes: Vibe Coding and AI PMO'}</span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section id="case-studies" className="page-section reveal scroll-mt-10 px-6 pb-24 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-7xl">
+          <div className="section-head">
+            <div>
+              <p className="section-kicker">{t.experienceKicker}</p>
+              <h2>{t.experienceTitle}</h2>
+            </div>
+            <p>{t.experienceIntro}</p>
+          </div>
+
+          <div className="case-study-stack mt-14">
+            {cases.map((item) => {
+              const isOpen = expandedCase === item.id;
+              const detailRows = [
+                [isZh ? '业务背景' : 'Background', item.details.background],
+                [isZh ? '核心挑战' : 'Challenge', item.details.challenge],
+                [isZh ? '我的角色' : 'My Role', item.details.role],
+                [isZh ? '结果' : 'Result', item.details.result],
+                [isZh ? '方法沉淀' : 'Reflection', item.details.reflection],
+              ];
+
+              return (
+                <article key={item.id} className="case-chapter">
+                  <div className="case-copy">
+                    <p className="case-eyebrow">{item.label}</p>
+                    <h3>{item.title}</h3>
+                    <p>{item.summary}</p>
+                    <div className="case-role">
+                      <BriefcaseBusiness className="h-4 w-4" />
+                      <span>{item.role}</span>
+                    </div>
+                    <div className="case-metrics">
+                      {item.metrics.map((metric) => (
+                        <span key={metric}>{metric}</span>
+                      ))}
+                    </div>
+                    <div className={`case-actions ${item.announcement ? 'has-inline-link' : ''}`}>
+                      {item.announcement ? (
+                        <a className="case-inline-link" href={item.announcement.url} target="_blank" rel="noreferrer">
+                          <span>
+                            <small>
+                              {item.announcement.label}
+                              {item.announcement.date ? ` · ${item.announcement.date}` : ''}
+                            </small>
+                            {item.announcement.title}
+                          </span>
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      ) : null}
+                      <button
+                        type="button"
+                        className="case-toggle"
+                        aria-expanded={isOpen}
+                        aria-controls={`${item.id}-detail`}
+                        onClick={() => setExpandedCase(isOpen ? null : item.id)}
+                      >
+                        {isOpen ? (isZh ? '收起案例' : 'Close story') : isZh ? '展开完整案例' : 'Read full story'}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id={`${item.id}-detail`} className={`case-detail ${isOpen ? 'is-open' : ''}`}>
+                    <div className="case-detail-inner">
+                      <div className="case-detail-grid">
+                        {detailRows.map(([label, value]) => (
+                          <div key={label} className="case-detail-row">
+                            <span>{label}</span>
+                            <p>{value}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="case-detail-columns">
+                        <div>
+                          <h4>{isZh ? '关键动作' : 'Actions'}</h4>
+                          <ul>
+                            {item.details.actions.map((action) => (
+                              <li key={action}>{action}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4>{isZh ? '搭建的机制' : 'System Built'}</h4>
+                          <ul>
+                            {item.details.systemBuilt.map((system) => (
+                              <li key={system}>{system}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+        </section>
+
+        <section id="method" className="page-section reveal scroll-mt-10 border-y border-white/10 px-6 pb-24 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-7xl">
+          <div className="section-head">
+            <div>
+              <p className="section-kicker">{t.methodKicker}</p>
+              <h2>{t.methodTitle}</h2>
+            </div>
+            <p>{t.methodIntro}</p>
+          </div>
+
+          <div className="method-rail mt-12">
+            {method.map((card) => (
+              <article key={card.number} className="method-card">
+                <span>{card.number}</span>
+                <h3>{card.title}</h3>
+                <p>{card.body}</p>
+                <div>{card.case}</div>
+              </article>
+            ))}
+          </div>
+        </div>
+        </section>
+
+        <section id="background" className="page-section reveal scroll-mt-10 px-6 pb-24 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-7xl">
+          <div className="section-head">
+            <div>
+              <p className="section-kicker">{t.journeyKicker}</p>
+              <h2>{t.journeyTitle}</h2>
+            </div>
+            <p>{t.journeyIntro}</p>
+          </div>
+
+          <div className="journey-layout mt-12 grid gap-5 lg:grid-cols-[0.68fr_1.32fr]">
+            <aside className="signal-panel">
+              <div className="signal-icon">
+                <Compass className="h-7 w-7" />
+              </div>
+              <h3>{selectedJourney.memoTitle}</h3>
+              <p>{selectedJourney.memo}</p>
+              <div className="mt-8 grid gap-3">
+                {selectedJourney.signals.map((signal, index) => {
+                  const Icon = signalIcons[index] ?? Target;
+
+                  return (
+                    <div key={signal} className="signal-row">
+                      <Icon className="h-5 w-5" style={{ color: 'var(--sage)' }} />
+                      <span>{signal}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </aside>
+
+            <div className="journey-track">
+              {selectedJourney.path.map((item, index) => (
+                <article key={`${item.company}-${item.year}`} className="journey-card">
+                  <div className="journey-index">{String(index + 1).padStart(2, '0')}</div>
+                  <div className="journey-card-body">
+                    <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="journey-phase-head">
+                        <div>
+                          <p className="text-sm font-bold" style={{ color: 'var(--sage)' }}>
+                            {item.year}
+                          </p>
+                          <h3>{item.phase}</h3>
+                        </div>
+                      </div>
+                      <span className="capability-pill">
+                        <Route className="h-4 w-4" style={{ color: 'var(--sage)' }} />
+                        {item.source}
+                      </span>
+                    </div>
+                    <h4>{item.title}</h4>
+                    <p>{item.body}</p>
+                    <div className="proof-line">
+                      <BriefcaseBusiness className="mt-1 h-5 w-5 shrink-0" style={{ color: 'var(--sage)' }} />
+                      <span>{item.proof}</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+        </section>
+
+        <section id="education" className="page-section reveal scroll-mt-10 px-6 pb-24 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-7xl">
+          <div className="section-head education-head">
+            <div>
+              <p className="section-kicker">{t.educationKicker}</p>
+              <div className="education-title-wrap">
+                <GraduationCap className="h-7 w-7" style={{ color: 'var(--sage)' }} />
+                <h2>{t.educationTitle}</h2>
+              </div>
+            </div>
+            <p className="education-intro">{t.educationIntro}</p>
+          </div>
+          <div className="education-grid mt-12">
+            {education.map((item, index) => (
+              <a
+                key={item.school}
+                href={item.website}
+                target="_blank"
+                rel="noreferrer"
+                className={`education-card education-card-${index + 1}`}
+              >
+                <div className="education-card-meta">
+                  <span className="education-card-phase">{isZh ? item.zhPhase : item.enPhase}</span>
+                  <span className="education-card-period">{item.period}</span>
+                </div>
+                <div className="flex items-start justify-between gap-5">
+                  <SchoolLogo mark={item.mark as keyof typeof schoolLogoAssets} />
+                  <ExternalLink className="h-5 w-5" style={{ color: 'var(--sage)' }} />
+                </div>
+                <p className="education-card-lead">{isZh ? item.zhLead : item.enLead}</p>
+                <h3>{isZh ? item.zh : item.school}</h3>
+                {item.zhTag || item.enTag ? (
+                  <div className="education-card-tags">
+                    <span>{isZh ? item.zhTag : item.enTag}</span>
+                  </div>
+                ) : null}
+                <p className="mt-5 text-base font-semibold" style={{ color: 'var(--text)' }}>
+                  {isZh ? item.zhDegree : item.enDegree}
+                </p>
+                <p className="mt-2 text-sm font-semibold" style={{ color: 'var(--sage)' }}>
+                  {isZh ? item.zhLocation : item.enLocation}
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+        </section>
+
+        <section id="contact" className="page-section reveal scroll-mt-10 px-6 pb-20 sm:px-10 lg:px-14">
+        <div className="contact-panel mx-auto max-w-7xl">
+          <div>
+            <p className="section-kicker">{t.contactKicker}</p>
+            <h2>{t.contactTitle}</h2>
+            <p>{t.contactBody}</p>
+          </div>
+          <div className="contact-actions">
+            <a href="mailto:lbxcyril@gmail.com">
+              <Mail className="h-4 w-4" />
+              lbxcyril@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/feed/" target="_blank" rel="noreferrer">
+              <ExternalLink className="h-4 w-4" />
+              {t.linkedin}
+            </a>
+          </div>
+        </div>
+        </section>
+      </div>
+    </main>
+  );
+}
