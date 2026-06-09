@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import baixiJournalBodyZh from './content/baixi-xyz-小白建站全记录.md?raw';
 import baixiJournalBodyEn from './content/baixi-xyz-build-log.en.md?raw';
 import vibeCodingJournalBodyZh from './content/vibe-coding-portfolio-retrospective.md?raw';
@@ -92,7 +92,7 @@ const nav = {
     ['工作方法', '#method'],
     ['职业背景', '#background'],
     ['教育背景', '#education'],
-    ['联系', '#contact'],
+    ['联系交流', '#contact'],
   ],
   en: [
     ['Cases', '#case-studies'],
@@ -1323,10 +1323,6 @@ export default function App() {
         journalEntries.zh.find((entry) => entry.slug === journalArticleSlug) ??
         null
       : null;
-  const heroStageStyle: CSSProperties = {
-    minHeight: '100dvh',
-  };
-
   useEffect(() => {
     setExpandedCase(null);
   }, [language]);
@@ -1483,7 +1479,10 @@ export default function App() {
             <span className="identity-mark">CL</span>
             <span className="identity-text">
               <strong>{isZh ? '刘柏希' : 'Cyril Liu'}</strong>
-              <small>{isZh ? 'PMO / 项目集管理' : 'PMO / Program Management'}</small>
+              <small>
+                <span>PMO</span>
+                <span className="identity-role-extra">{isZh ? ' / 项目集管理' : ' / Program Management'}</span>
+              </small>
             </span>
           </a>
           <nav className="site-nav site-nav-inline" aria-label={isZh ? '主导航' : 'Primary navigation'}>
@@ -1534,7 +1533,7 @@ export default function App() {
           <div className="hero-scrim" />
           <div className="hero-grid" />
 
-          <div className="hero-stage relative z-10 mx-auto grid w-full max-w-7xl items-end gap-8 px-6 pb-14 pt-4 sm:px-8" style={heroStageStyle}>
+          <div className="hero-stage relative z-10 mx-auto grid w-full max-w-7xl items-end gap-8 px-6 pb-14 pt-4 sm:px-8">
             <div className="hero-copy max-w-5xl">
               <p className="hero-greeting" aria-label={`${t.greetingLead}${t.greetingFocus}`}>
                 <span>{t.greetingLead}</span>
