@@ -1,19 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.baixi.xyz/</loc>
     <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/" />
   </url>
   <url>
     <loc>https://www.baixi.xyz/journal</loc>
     <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/journal" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/journal" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/journal</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/journal" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/journal" />
   </url>
   <url>
     <loc>https://www.baixi.xyz/journal/vibe-coding-portfolio-retrospective</loc>
     <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/journal/vibe-coding-portfolio-retrospective" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/journal/vibe-coding-portfolio-retrospective" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/journal/vibe-coding-portfolio-retrospective</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/journal/vibe-coding-portfolio-retrospective" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/journal/vibe-coding-portfolio-retrospective" />
   </url>
   <url>
     <loc>https://www.baixi.xyz/journal/baixi-xyz-launch-log</loc>
     <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/journal/baixi-xyz-launch-log" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/journal/baixi-xyz-launch-log" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/journal/baixi-xyz-launch-log</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/journal/baixi-xyz-launch-log" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/journal/baixi-xyz-launch-log" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/cases/gate-domain-migration</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/gate-domain-migration" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/gate-domain-migration" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/cases/gate-domain-migration</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/gate-domain-migration" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/gate-domain-migration" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/cases/ai-pmo-automation</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/ai-pmo-automation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/ai-pmo-automation" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/cases/ai-pmo-automation</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/ai-pmo-automation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/ai-pmo-automation" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/cases/design-delivery-automation</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/design-delivery-automation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/design-delivery-automation" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/cases/design-delivery-automation</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/design-delivery-automation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/design-delivery-automation" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/cases/seo-geo-aso-portfolio</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/seo-geo-aso-portfolio" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/seo-geo-aso-portfolio" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/cases/seo-geo-aso-portfolio</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/seo-geo-aso-portfolio" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/seo-geo-aso-portfolio" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/cases/coins-global-expansion</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/coins-global-expansion" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/coins-global-expansion" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/cases/coins-global-expansion</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/coins-global-expansion" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/coins-global-expansion" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/cases/binance-global-payments</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/binance-global-payments" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/binance-global-payments" />
+  </url>
+  <url>
+    <loc>https://www.baixi.xyz/en/cases/binance-global-payments</loc>
+    <lastmod>2026-07-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.baixi.xyz/cases/binance-global-payments" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.baixi.xyz/en/cases/binance-global-payments" />
   </url>
 </urlset>

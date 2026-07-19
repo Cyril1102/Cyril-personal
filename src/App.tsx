@@ -5,6 +5,14 @@ import vibeCodingJournalBodyZh from './content/vibe-coding-portfolio-retrospecti
 import vibeCodingJournalBodyEn from './content/vibe-coding-portfolio-retrospective.en.md?raw';
 import { applySeoMetadata } from './seo';
 import {
+  caseSlugById,
+  getCasePath,
+  getJournalPath,
+  localizePath,
+  parseLocalizedPath,
+  type SiteLanguage,
+} from './routes';
+import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
@@ -24,7 +32,7 @@ import {
   X,
 } from 'lucide-react';
 
-type Language = 'zh' | 'en';
+type Language = SiteLanguage;
 type Theme = 'dark' | 'light';
 type BrandName = 'Gate' | 'Coins.ph' | 'Binance' | 'Ctrip.com' | 'WeWork' | 'HAND';
 
@@ -1551,18 +1559,9 @@ function renderMarkdownDocument(markdown: string) {
 }
 
 export default function App() {
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window === 'undefined') {
-      return 'zh';
-    }
-
-    try {
-      const savedLanguage = window.localStorage.getItem('cyril-site-language');
-      return savedLanguage === 'zh' || savedLanguage === 'en' ? savedLanguage : 'zh';
-    } catch {
-      return 'zh';
-    }
-  });
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const { language: routeLanguage, routePath } = parseLocalizedPath(pathname);
+  const [language, setLanguage] = useState<Language>(routeLanguage);
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') {
       return 'light';
@@ -1584,16 +1583,36 @@ export default function App() {
   const journal = journalEntries[language];
   const cases = caseStudies[language];
   const themeClass = theme === 'light' ? 'theme-light' : 'theme-dark';
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  const journalArticleMatch = pathname.match(/^\/journal\/([^/]+)$/);
+  const journalArticleMatch = routePath.match(/^\/journal\/([^/]+)$/);
   const journalArticleSlug = journalArticleMatch?.[1] ?? null;
-  const isJournalPage = pathname === '/journal';
+  const isJournalPage = routePath === '/journal';
+  const caseStudyMatch = routePath.match(/^\/cases\/([^/]+)$/);
+  const caseStudySlug = caseStudyMatch?.[1] ?? null;
+  const currentCaseStudy = caseStudySlug
+    ? cases.find((item) => caseSlugById[item.id] === caseStudySlug) ?? null
+    : null;
   const currentJournalArticle =
     journalArticleSlug
       ? journal.find((entry) => entry.slug === journalArticleSlug) ??
         journalEntries.zh.find((entry) => entry.slug === journalArticleSlug) ??
         null
       : null;
+
+  const switchLanguage = () => {
+    const nextLanguage: Language = language === 'zh' ? 'en' : 'zh';
+    try {
+      window.localStorage.setItem('cyril-site-language', nextLanguage);
+    } catch {
+      // URL remains the source of truth when storage is unavailable.
+    }
+
+    const nextPath = localizePath(routePath, nextLanguage);
+    window.location.assign(`${nextPath}${window.location.hash}`);
+  };
+
+  useEffect(() => {
+    setLanguage(routeLanguage);
+  }, [routeLanguage]);
   useEffect(() => {
     setExpandedCase(null);
   }, [language]);
@@ -1671,12 +1690,124 @@ export default function App() {
     </a>
   ));
 
+  if (currentCaseStudy) {
+    const detailSections = [
+      [isZh ? '项目背景' : 'Background', currentCaseStudy.details.background],
+      [isZh ? '核心挑战' : 'Challenge', currentCaseStudy.details.challenge],
+      [isZh ? '我的角色' : 'My role', currentCaseStudy.details.role],
+      [isZh ? '交付结果' : 'Result', currentCaseStudy.details.result],
+      [isZh ? '方法沉淀' : 'Reflection', currentCaseStudy.details.reflection],
+    ];
+
+    return (
+      <main className={`site-shell case-page min-h-screen ${themeClass} ${isZh ? 'site-zh' : 'site-en'}`}>
+        <div className="hero-grid" />
+        <header className="site-header journal-header relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
+          <a href={`${localizePath('/', language)}#case-studies`} className="identity-lockup" aria-label={isZh ? '返回案例列表' : 'Back to case studies'}>
+            <span className="identity-mark">CL</span>
+            <span className="identity-text">
+              <strong>{isZh ? '刘柏希' : 'Cyril Liu'}</strong>
+              <small>{isZh ? '返回案例列表' : 'Back to cases'}</small>
+            </span>
+          </a>
+          <div className="header-controls">
+            <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
+            <button
+              type="button"
+              onClick={switchLanguage}
+              className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
+              aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
+            >
+              <span>中</span>
+              <span>EN</span>
+            </button>
+          </div>
+        </header>
+
+        <article className="case-page-shell mx-auto max-w-7xl px-6 pb-24 pt-14 sm:px-8">
+          <div className="case-page-hero">
+            <div className="case-page-heading">
+              <p className="section-kicker">{currentCaseStudy.label}</p>
+              <h1>{currentCaseStudy.title}</h1>
+              <p className="case-page-summary">{currentCaseStudy.summary}</p>
+            </div>
+            <div className="case-page-brand">
+              <BrandLogo company={currentCaseStudy.company} size="lg" />
+              <span>{currentCaseStudy.company}</span>
+            </div>
+          </div>
+
+          <div className="case-page-role">
+            <BriefcaseBusiness className="h-5 w-5" />
+            <span>{currentCaseStudy.role}</span>
+          </div>
+
+          <div className="case-page-metrics" aria-label={isZh ? '关键成果' : 'Key outcomes'}>
+            {currentCaseStudy.metrics.map((metric) => (
+              <div key={metric}>{metric}</div>
+            ))}
+          </div>
+
+          <div className="case-page-narrative">
+            {detailSections.map(([label, value]) => (
+              <section key={label}>
+                <h2>{label}</h2>
+                <p>{value}</p>
+              </section>
+            ))}
+          </div>
+
+          <div className="case-page-operating-model">
+            <section>
+              <h2>{isZh ? '关键动作' : 'Actions'}</h2>
+              <ol>
+                {currentCaseStudy.details.actions.map((action, index) => (
+                  <li key={action}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    {action}
+                  </li>
+                ))}
+              </ol>
+            </section>
+            <section>
+              <h2>{isZh ? '搭建的机制' : 'Systems built'}</h2>
+              <ul>
+                {currentCaseStudy.details.systemBuilt.map((system) => (
+                  <li key={system}>
+                    <ShieldCheck className="h-5 w-5" />
+                    {system}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+
+          <footer className="case-page-footer">
+            {currentCaseStudy.announcement ? (
+              <a href={currentCaseStudy.announcement.url} target="_blank" rel="noreferrer">
+                <span>
+                  <small>{currentCaseStudy.announcement.label}</small>
+                  {currentCaseStudy.announcement.title}
+                </span>
+                <ExternalLink className="h-5 w-5" />
+              </a>
+            ) : null}
+            <a href={`${localizePath('/', language)}#case-studies`}>
+              <ArrowLeft className="h-5 w-5" />
+              {isZh ? '返回全部案例' : 'Back to all cases'}
+            </a>
+          </footer>
+        </article>
+      </main>
+    );
+  }
+
   if (isJournalPage || currentJournalArticle) {
     return (
       <main className={`site-shell journal-page min-h-screen ${themeClass} ${isZh ? 'site-zh' : 'site-en'}`}>
         <div className="hero-grid" />
         <header className="site-header journal-header relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
-          <a href="/#top" className="identity-lockup" aria-label={isZh ? '回到首页' : 'Back home'}>
+          <a href={`${localizePath('/', language)}#top`} className="identity-lockup" aria-label={isZh ? '回到首页' : 'Back home'}>
             <span className="identity-mark">CL</span>
             <span className="identity-text">
               <strong>{isZh ? '刘柏希' : 'Cyril Liu'}</strong>
@@ -1687,7 +1818,7 @@ export default function App() {
             <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
             <button
               type="button"
-              onClick={() => setLanguage((current) => (current === 'zh' ? 'en' : 'zh'))}
+              onClick={switchLanguage}
               className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
               aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
             >
@@ -1721,7 +1852,7 @@ export default function App() {
               <p>{t.journalIntro}</p>
               <div className="journal-list mt-12">
                 {journal.slice(0, 5).map((entry) => (
-                  <a key={`${entry.slug}-${entry.title}`} href={`/journal/${entry.slug}`} className="journal-card journal-card-link">
+                  <a key={`${entry.slug}-${entry.title}`} href={getJournalPath(entry.slug, language)} className="journal-card journal-card-link">
                     <div className="journal-card-meta">
                       <span>{entry.tag}</span>
                       <small>{entry.date}</small>
@@ -1769,7 +1900,7 @@ export default function App() {
             <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
             <button
               type="button"
-              onClick={() => setLanguage((current) => (current === 'zh' ? 'en' : 'zh'))}
+              onClick={switchLanguage}
               className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
               aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
             >
@@ -1793,7 +1924,7 @@ export default function App() {
             <ThemeToggle theme={theme} isZh={isZh} onChange={setTheme} />
             <button
               type="button"
-              onClick={() => setLanguage((current) => (current === 'zh' ? 'en' : 'zh'))}
+              onClick={switchLanguage}
               className={`language-toggle ${isZh ? 'is-zh' : 'is-en'}`}
               aria-label={isZh ? '切换到英文' : 'Switch to Chinese'}
             >
@@ -1828,7 +1959,7 @@ export default function App() {
                   {t.secondary}
                 </a>
               </div>
-              <a href="/journal" className="hero-journal-link">
+              <a href={getJournalPath(null, language)} className="hero-journal-link">
                 <BookOpen className="h-4 w-4" />
                 <span>{isZh ? '学习日志：Vibe Coding 与 AI PMO 记录' : 'Working Notes: Vibe Coding and AI PMO'}</span>
                 <ArrowRight className="h-4 w-4" />
@@ -1920,6 +2051,10 @@ export default function App() {
                         {isOpen ? (isZh ? '收起案例' : 'Close story') : isZh ? '展开完整案例' : 'Read full story'}
                         <ArrowRight className="h-4 w-4" />
                       </button>
+                      <a className="case-page-link" href={getCasePath(item.id, language)}>
+                        {isZh ? '案例详情页' : 'Open case page'}
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
                     </div>
                   </div>
 

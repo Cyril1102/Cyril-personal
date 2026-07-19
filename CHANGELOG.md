@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.2] - 2026-07-19
+
+### Added
+
+- Added dedicated Chinese and English URLs for the homepage, journals, and six representative case studies.
+- Added standalone, search-ready case pages with page-specific metadata, breadcrumbs, and structured data.
+- Added bilingual alternate links, an expanded sitemap, and a concise `llms.txt` discovery file.
+
+### Improved
+
+- Connected homepage case summaries to their full case pages while preserving the existing expandable overview.
+- Expanded build-time prerendering from four pages to twenty localized pages.
+- Verified mobile, desktop, and 4K layouts together with canonical URLs, language signals, structured data, and overflow checks.
+
 ## [1.1.1] - 2026-07-19
 
 ### Added

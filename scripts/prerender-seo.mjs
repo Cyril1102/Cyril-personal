@@ -7,11 +7,21 @@ import { preview } from 'vite';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(rootDir, 'dist');
-const routes = [
+const baseRoutes = [
   '/',
   '/journal',
   '/journal/vibe-coding-portfolio-retrospective',
   '/journal/baixi-xyz-launch-log',
+  '/cases/gate-domain-migration',
+  '/cases/ai-pmo-automation',
+  '/cases/design-delivery-automation',
+  '/cases/seo-geo-aso-portfolio',
+  '/cases/coins-global-expansion',
+  '/cases/binance-global-payments',
+];
+const routes = [
+  ...baseRoutes,
+  ...baseRoutes.map((route) => (route === '/' ? '/en/' : `/en${route}`)),
 ];
 
 const server = await preview({
