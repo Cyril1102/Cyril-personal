@@ -1,11 +1,11 @@
 {
   "name": "cyril-personal",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/prerender-seo.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "visual:acceptance": "node scripts/visual-acceptance.mjs"
   },

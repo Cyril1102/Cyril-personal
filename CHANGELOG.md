@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1] - 2026-07-19
+
+### Added
+
+- Added unique search titles, descriptions, canonical URLs, social previews, and structured data for the homepage and journal pages.
+- Added valid `robots.txt` and XML sitemap files for Google discovery.
+- Added build-time prerendering so important page content is available in the initial HTML response.
+
 ## [1.1.0] - 2026-07-19
 
 ### Changed

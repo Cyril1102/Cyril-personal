@@ -3,6 +3,7 @@ import baixiJournalBodyZh from './content/baixi-xyz-小白建站全记录.md?raw
 import baixiJournalBodyEn from './content/baixi-xyz-build-log.en.md?raw';
 import vibeCodingJournalBodyZh from './content/vibe-coding-portfolio-retrospective.md?raw';
 import vibeCodingJournalBodyEn from './content/vibe-coding-portfolio-retrospective.en.md?raw';
+import { applySeoMetadata } from './seo';
 import {
   ArrowLeft,
   ArrowRight,
@@ -1621,6 +1622,10 @@ export default function App() {
 
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
   }, [language]);
+
+  useEffect(() => {
+    applySeoMetadata(pathname, language);
+  }, [language, pathname]);
 
   useEffect(() => {
     const root = document.documentElement;
