@@ -1,9 +1,10 @@
-import { useEffect, useState, type JSX } from 'react';
+import { Fragment, useEffect, useState, type JSX } from 'react';
 import baixiJournalBodyZh from './content/baixi-xyz-小白建站全记录.md?raw';
 import baixiJournalBodyEn from './content/baixi-xyz-build-log.en.md?raw';
 import vibeCodingJournalBodyZh from './content/vibe-coding-portfolio-retrospective.md?raw';
 import vibeCodingJournalBodyEn from './content/vibe-coding-portfolio-retrospective.en.md?raw';
 import {
+  ArrowLeft,
   ArrowRight,
   BookOpen,
   BriefcaseBusiness,
@@ -121,11 +122,11 @@ const content = {
     methodIntro: '做项目管理，我通常先看价值、风险、资源和决策。真正考验人的，往往是判断能不能提前。',
     journalKicker: '学习札记',
     journalTitle: '把新的工作方式记下来',
-    journalIntro: '这里记 Vibe Coding、AI PMO 和个人工作流。比起工具本身，我更关心它们怎样改变真实工作。',
+    journalIntro: '持续记录 Vibe Coding、AI PMO 和个人工作流，也记录这些实践带来的判断与变化。',
     experienceKicker: '项目案例',
     experienceTitle: '几个关键项目现场',
     experienceIntro:
-      '这些案例覆盖品牌切换、增长、支付、合规和国际化场景，也更接近我工作里最有代表性的几个现场。',
+      '这些案例覆盖品牌切换、设计交付、增长、支付、合规和国际化场景，也更接近我工作里最有代表性的几个现场。',
     educationKicker: '教育经历',
     educationTitle: '从项目现场走向系统学习',
     educationIntro:
@@ -135,13 +136,12 @@ const content = {
     contactBody: '如果你想进一步了解我的项目治理、全球交付或 AI PMO 实践，欢迎通过邮件或领英联系我。',
     website: '官网',
     linkedin: '领英',
-    resumeSoon: '简历下载准备中',
   },
   en: {
     greetingLead: 'Hi,',
     greetingFocus: "I'm",
     name: 'Cyril Liu',
-    role: 'PMO Lead / Program & Portfolio Management',
+    role: 'PMO / Program & Portfolio Management Lead',
     manifesto: 'I focus on the parts of work that shape delivery: direction, risk, resourcing, and decisions.',
     primary: 'View Cases',
     secondary: 'Contact',
@@ -160,7 +160,7 @@ const content = {
     experienceKicker: 'Case Studies',
     experienceTitle: 'Selected Case Studies',
     experienceIntro:
-      'These cases span brand migration, growth, payments, compliance, and market launches. Together they show the way I work: read the situation clearly, then organize the work around it.',
+      'These cases span brand migration, design delivery, growth, payments, compliance, and market launches. Together they show the way I work: read the situation clearly, then organize the work around it.',
     educationKicker: 'Education',
     educationTitle: 'From Project Work to Formal Study',
     educationIntro:
@@ -170,7 +170,6 @@ const content = {
     contactBody: 'For conversations about project governance, global delivery, or AI PMO, email or LinkedIn is the best place to start.',
     website: 'Website',
     linkedin: 'LinkedIn',
-    resumeSoon: 'Resume download coming soon',
   },
 };
 
@@ -247,14 +246,14 @@ const journey = {
         title: 'Put global teams on the same delivery standard.',
         body:
           "Fiat payments sat across compliance, risk, regional business, operations, and engineering. When regulation or regional strategy changed, the program boundary moved too. I kept scope, acceptance, and escalation clear, then made E2E flow, DOD, and risk review part of the team's operating rhythm.",
-        proof: 'Around 45% of 2022 global fiat payment programs / E2E flow / DOD',
+        proof: 'Around 45% of 2022 global fiat payment projects / E2E flow / DOD',
       },
       {
         year: '2024 - 2025',
         company: 'Coins.ph',
         phase: 'International launch',
         source: 'Coins.ph / Market expansion',
-        title: 'International launch depends on finding the path.',
+        title: 'Turn changing market rules into a viable launch path.',
         body:
           'Australia, Brazil, and Europe each came with different entry conditions. Regulation, KYC, fiat rails, wallet setup, partner readiness, and launch criteria kept shifting the project boundary. I learned to spot constraints early and turn them into priorities, risks, dependencies, and next steps.',
         proof: 'Australia / Brazil / Europe expansion / around 15% shorter delivery cycles',
@@ -263,7 +262,7 @@ const journey = {
         year: '2025 - Apr 2026',
         company: 'Gate',
         phase: 'Portfolio governance',
-        source: 'Gate / Multi-business PMO',
+        source: 'Gate / PMO across multiple business lines',
         title: 'Bring parallel programs into one management view.',
         body:
           'At Gate, several business lines accelerated at once: brand upgrade, growth, payment cards, AI efficiency, and experiments. Each one competed for resources and attention. I made status, risk, and trade-offs visible early, and gradually turned demand pools, dashboards, risk alerts, executive reporting, and AI-assisted analysis into a repeatable portfolio governance model.',
@@ -446,9 +445,9 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       label: 'Case 02 / AI + PMO 自动化',
       title: '把高频 PMO 工作整理成可复用流程',
       summary:
-        '多业务线并行后，周报、迭代分析和风险梳理占掉了很多重复时间。我把飞书多维表格、Meegle、MCP 和 AI Skills 接进流程，先整理信息，再由 PM 完成判断，也把 SEO 关键词采集到内容复盘、GDC 设计提需流转等高频工作整理成可复用路径。',
+        '多业务线并行后，周报、迭代分析和风险梳理占掉了很多重复时间。我把飞书多维表格、Meegle、MCP 和 AI Skills 接进流程，先整理信息，再由 PM 完成判断，并把 SEO 关键词采集、内容生成和效果复盘串成一条工作流。',
       role: 'AI PMO 实践者 / 自动化流程设计 / 项目数据分析',
-      metrics: ['周均 200+ 设计需求流转', '周报与分析初稿约 10 分钟生成', '沉淀 AI 辅助 PMO 流程'],
+      metrics: ['周报与分析初稿约 10 分钟生成', '串联 SEO 关键词采集与内容复盘', '沉淀 AI 辅助 PMO 流程'],
       tags: ['AI workflow', 'Reporting automation', 'Risk signal'],
       details: {
         background:
@@ -461,26 +460,56 @@ const caseStudies: Record<Language, CaseStudy[]> = {
           '梳理飞书多维表格与 Meegle 数据结构',
           '用 MCP 和 AI Skills 生成周报与分析初稿',
           '把 SEO 关键词采集、产文和复盘串成一条增长工作流',
-          '为 GDC 部门搭建设计提需系统与自动化流转路径',
           '建立风险识别字段和输出模板',
           '把 PM 判断保留在最终取舍环节',
         ],
-        systemBuilt: ['设计需求流转看板', 'GDC 设计提需自动化系统', 'SEO 关键词采集到内容复盘工作流', '周报初稿生成流程', 'Sprint 分析模板', '风险识别与升级清单'],
+        systemBuilt: ['SEO 关键词采集到内容复盘工作流', '周报初稿生成流程', 'Sprint 分析模板', '风险识别与升级清单'],
         result:
-          '这套流程支撑了周均 200+ 设计需求流转，也让周报、迭代分析和风险梳理的初稿更快落地。',
+          '周报、迭代分析和风险梳理的初稿可以在约 10 分钟内形成，PM 随后完成校准、取舍和沟通。',
         reflection:
-          'AI 在这里承担的是整理和归纳。真正的取舍、沟通和推进，还是由人来完成。',
+          'AI 负责整理和归纳，取舍、沟通和推进仍由人完成。',
+      },
+    },
+    {
+      id: 'design-delivery-automation',
+      company: 'Gate',
+      label: 'Case 03 / 设计交付体系自动化',
+      title: '从需求表单到 OKR 复盘：设计团队交付体系自动化',
+      summary:
+        '视觉、影视、品牌和工业设计团队每天承接大量来自业务侧的设计需求。我把表单、多维表格、Meegle 和 OKR 数据串起来，让需求提交、自动建单、排单流转、验收确认和效能复盘进入同一套工作系统。',
+      role: '设计团队 PMO / 流程自动化设计 / 交付效能管理',
+      metrics: ['支撑周均 200+ 设计需求流转', '表单到 Meegle 自动建单', '交付进度与 OKR 数据可复盘'],
+      tags: ['Design operations', 'Meegle automation', 'Delivery analytics'],
+      details: {
+        background:
+          'Gate 的设计团队服务多个业务方向，需求入口多、交付节奏快，视觉、影视、品牌和工业设计团队都需要稳定承接业务侧需求。',
+        challenge:
+          '早期需求容易散落在聊天、会议和临时文档里。建单、分单、追状态、验收和完结通知都依赖人工处理，管理层也很难持续看到团队产能和目标进展。',
+        role:
+          '我负责梳理设计需求从提交到交付确认的完整链路，并把团队目标、OKR 和交付数据接入同一套管理视图。',
+        actions: [
+          '设计业务方提需表单，统一收集需求背景、交付物、时间要求和验收口径',
+          '用多维表格承接表单信息，形成结构化需求池',
+          '通过 API 将多维表格需求同步到 Meegle，自动创建需求任务',
+          '在 Meegle 中配置排单、流程流转、业务验收、交付确认和完结通知',
+          '结合团队目标和 OKR，沉淀交付进度、响应效率、团队产能和目标完成情况分析',
+        ],
+        systemBuilt: ['设计提需表单', '多维表格需求池', 'Meegle 自动建单与排单流转', '业务验收与完结通知机制', '团队 OKR 与交付效能分析看板'],
+        result:
+          '这套系统支撑周均 200+ 设计需求流转，减少了人工建单、分单和反复追踪状态的工作量，也让团队可以用真实交付数据复盘目标完成情况。',
+        reflection:
+          '设计协作的效率，取决于需求入口、责任流转和验收口径是否清楚。系统搭好以后，团队讨论的重点会更自然地回到优先级、质量和产能判断。',
       },
     },
     {
       id: 'growth-portfolio',
       company: 'Gate',
-      label: 'Case 03 / 增长项目集管理',
+      label: 'Case 04 / 增长项目集管理',
       title: '把散点增长需求收束成项目组合',
       summary:
         'SEO、GEO、ASO 更像一组持续变化的增长项目组合。我建立需求池、排期、风险预警、数据看板和管理层周报，让它们进入同一套管理视图。',
       role: '增长型 PMO / 项目组合治理 / 管理层汇报',
-      metrics: ['核心指标阶段性显著增长', '部分指标达到翻倍水平', '建立增长项目组合治理机制'],
+      metrics: ['建立统一增长项目组合', '核心指标阶段性增长', '部分指标在阶段内接近翻倍'],
       tags: ['SEO / GEO / ASO', 'Portfolio governance', 'Growth PMO'],
       details: {
         background:
@@ -492,7 +521,7 @@ const caseStudies: Record<Language, CaseStudy[]> = {
         actions: ['建立统一需求池', '按业务目标和资源代价排序', '设置风险预警和依赖跟踪', '沉淀管理层周报和数据看板'],
         systemBuilt: ['增长需求池', '组合排期机制', '风险预警表', '管理层增长周报'],
         result:
-          '核心指标在阶段内有明显增长，部分指标达到翻倍，也让增长项目从散点需求变成可治理的组合。',
+          '核心指标在阶段内实现增长，部分指标接近翻倍；增长工作也从散点需求进入统一的项目组合。',
         reflection:
           '增长 PMO 的价值，在于让资源持续投向更值得做的事情，也让团队看清每个需求的代价。',
       },
@@ -500,7 +529,7 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'coins-localization',
       company: 'Coins.ph',
-      label: 'Case 04 / 多国家本地化与合规',
+      label: 'Case 05 / 多国家本地化与合规',
       title: '在多国监管条件里找到上线路径',
       summary:
         '澳大利亚、巴西、欧洲的上线条件各不相同。监管、KYC、法币链路、钱包隔离和合作方节奏都会改写项目边界。我把这些变化整理成优先级、风险、依赖和下一步责任人。',
@@ -525,7 +554,7 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'binance-fiat',
       company: 'Binance',
-      label: 'Case 05 / 全球法币支付',
+      label: 'Case 06 / 全球法币支付',
       title: '让全球支付项目在时区和规则差异中交付',
       summary:
         '全球法币支付项目牵动合规、风控、区域业务、运营和研发。时区、工作周和监管判断都会改写交付边界。我用区域窗口、异步记录、E2E 流程、DOD 和升级机制，把分散团队纳入同一套协作秩序。',
@@ -575,7 +604,7 @@ const caseStudies: Record<Language, CaseStudy[]> = {
         actions: ['Mapped all external touchpoints', 'Defined cutover windows and owners', 'Used screenshots and links as validation evidence', 'Reviewed risks and missed items daily'],
         systemBuilt: ['Migration control sheet', 'Touchpoint validation flow', 'Daily risk review', 'Leadership progress view'],
         result:
-          "The migration was completed in three weeks without major incidents, and it gave me a fast entry into Gate's operating core.",
+          'The migration was completed in three weeks without major incidents. It also gave me a fast understanding of Gate’s key operating and cross-functional workflows.',
         reflection:
           'Large cutovers hold when boundaries, ownership, and validation methods stay clear from start to finish.',
       },
@@ -586,9 +615,9 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       label: 'Case 02 / AI and PMO automation',
       title: 'Turning repeated PMO work into a reusable workflow',
       summary:
-        'As more business lines ran in parallel, weekly reporting, sprint analysis, and risk review started to consume the same hours each week. I used Feishu Bitable, Meegle, MCP, and AI Skills to structure the inputs first and keep the final call with PMs, while turning SEO content operations and GDC design intake into reusable workflows.',
+        'Parallel business lines made weekly reporting, sprint analysis, and risk review increasingly repetitive. I used Feishu Bitable, Meegle, MCP, and AI Skills to structure the inputs while PMs kept the final judgment. I also connected keyword research, content production, and performance review into one SEO workflow.',
       role: 'AI PMO / workflow design / project data analysis',
-      metrics: ['200+ design requests per week', 'Report and analysis drafts in about 10 minutes', 'AI-assisted PMO workflow built'],
+      metrics: ['Report and analysis drafts in about 10 minutes', 'SEO workflow from keyword research to review', 'Reusable AI-assisted PMO workflow'],
       tags: ['AI workflow', 'Reporting automation', 'Risk signal'],
       details: {
         background:
@@ -601,26 +630,56 @@ const caseStudies: Record<Language, CaseStudy[]> = {
           'Structured Bitable and Meegle data',
           'Used MCP and AI Skills for report drafts',
           'Connected keyword collection, content production, and review into one SEO workflow',
-          'Built an automated design intake path for the GDC team',
           'Defined risk fields and output templates',
           'Kept human judgment in final trade-offs',
         ],
-        systemBuilt: ['Design request board', 'GDC design intake automation', 'SEO workflow from keyword collection to content review', 'Weekly report draft flow', 'Sprint analysis template', 'Risk detection checklist'],
+        systemBuilt: ['SEO workflow from keyword research to performance review', 'Weekly report draft flow', 'Sprint analysis template', 'Risk detection checklist'],
         result:
-          'The workflow supported 200+ design requests per week and made recurring report, sprint, and risk drafts faster and more consistent.',
+          'Weekly reports, sprint analysis, and risk-review drafts could be prepared in about 10 minutes, leaving PMs to validate the output and make the final calls.',
         reflection:
           'AI works best here as operating support. It handles structure and first drafts, while judgment, trade-offs, communication, and follow-through stay with people.',
       },
     },
     {
+      id: 'design-delivery-automation',
+      company: 'Gate',
+      label: 'Case 03 / Design delivery automation',
+      title: 'From intake forms to OKR review: an automated design delivery system',
+      summary:
+        'Visual, video, brand, and industrial design teams handled a constant flow of requests. I connected intake forms, Bitable, Meegle, and OKR data into one system for task creation, scheduling, acceptance, delivery confirmation, and performance review.',
+      role: 'Design team PMO / workflow automation / delivery performance management',
+      metrics: ['Supported 200+ design requests per week', 'Automated task creation from intake to Meegle', 'Delivery and OKR data ready for review'],
+      tags: ['Design operations', 'Meegle automation', 'Delivery analytics'],
+      details: {
+        background:
+          'At Gate, the design organization supported many business lines at the same time. Visual, video, brand, and industrial design teams needed a stable way to receive and manage demand from different stakeholders.',
+        challenge:
+          'Requests were easy to lose across chats, meetings, and temporary documents. Task creation, assignment, status tracking, acceptance, and completion notices relied heavily on manual work. Leadership also needed a clearer view of capacity and OKR progress.',
+        role:
+          'I mapped the full path from request submission to delivery confirmation, then connected team goals, OKRs, and delivery data into one management view.',
+        actions: [
+          'Designed a business intake form to capture context, deliverables, timing, and acceptance criteria',
+          'Used Bitable to structure incoming requests into a managed demand pool',
+          'Synced Bitable records to Meegle through API and created tasks automatically',
+          'Configured Meegle for scheduling, workflow routing, business acceptance, delivery confirmation, and completion notices',
+          'Connected team goals and OKRs with delivery data for progress, response time, capacity, and goal review',
+        ],
+        systemBuilt: ['Design intake form', 'Bitable demand pool', 'Meegle task creation and scheduling flow', 'Acceptance and completion notification mechanism', 'Team OKR and delivery performance dashboard'],
+        result:
+          'The system supported more than 200 design requests per week, reduced manual task creation and status chasing, and gave the team reliable delivery data for OKR review.',
+        reflection:
+          'Clear intake, ownership, and acceptance criteria create a dependable design operation. The team can then focus on priorities, quality, and capacity.',
+      },
+    },
+    {
       id: 'growth-portfolio',
       company: 'Gate',
-      label: 'Case 03 / Growth portfolio governance',
+      label: 'Case 04 / Growth portfolio governance',
       title: 'Turning scattered growth requests into a portfolio',
       summary:
         'SEO, GEO, and ASO never behaved like a single project. I organized them as a portfolio, with demand pools, scheduling, risk alerts, dashboards, and executive reporting.',
       role: 'Growth PMO / portfolio governance / executive reporting',
-      metrics: ['Clear growth portfolio rhythm', 'Key metrics showed strong stage growth', 'Some metrics reached around 2x'],
+      metrics: ['One governed growth portfolio', 'Key metrics grew during the period', 'Some indicators nearly doubled'],
       tags: ['SEO / GEO / ASO', 'Portfolio governance', 'Growth PMO'],
       details: {
         background:
@@ -632,7 +691,7 @@ const caseStudies: Record<Language, CaseStudy[]> = {
         actions: ['Built a shared demand pool', 'Prioritized by goal and resource cost', 'Tracked dependencies and risk alerts', 'Created dashboards and executive weekly reports'],
         systemBuilt: ['Growth demand pool', 'Portfolio scheduling mechanism', 'Risk alert sheet', 'Executive growth weekly report'],
         result:
-          'The work supported clear stage growth in key metrics, with some indicators nearly doubling, and turned scattered requests into a governed portfolio.',
+          'Key metrics grew during the period, with some indicators nearly doubling. The work also moved from scattered requests into one governed portfolio.',
         reflection:
           'Growth PMO keeps resources tied to the work that matters most and makes the cost of each request visible.',
       },
@@ -640,10 +699,10 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'coins-localization',
       company: 'Coins.ph',
-      label: 'Case 04 / Localization and compliance',
+      label: 'Case 05 / Localization and compliance',
       title: 'Finding the launch path across different market rules',
       summary:
-        'Australia, Brazil, and Europe each came with different launch conditions. Regulation, KYC, fiat rails, wallet setup, partner readiness, and acceptance criteria kept moving the boundary. I turned that shifting ground into priorities, risks, dependencies, and next owners.',
+        'Australia, Brazil, and Europe each had different launch conditions. I translated changing rules around KYC, fiat rails, wallets, partners, and acceptance into priorities, risks, dependencies, and owners.',
       role: 'International PMO / compliance coordination / go-to-market delivery',
       metrics: ['Supported multi-country expansion', 'Delivery cycles shortened by about 15%', 'Crypto on Credit moved from concept to launch'],
       tags: ['Localization', 'Compliance', 'Market expansion'],
@@ -665,24 +724,24 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'binance-fiat',
       company: 'Binance',
-      label: 'Case 05 / Global fiat payments',
+      label: 'Case 06 / Global fiat payments',
       title: 'Delivering global payments across time zones and rule differences',
       summary:
-        'Global fiat payment programs sat across compliance, risk, regional business, operations, and engineering. Time zones, different work weeks, and changing regulatory judgment all shaped the delivery boundary. I used regional communication windows, async records, E2E flow, DOD, and escalation paths to give the work a single operating rhythm.',
+        'Global fiat payments connected compliance, risk, regional business, operations, and engineering. Time zones, different work weeks, and changing regulation shaped every delivery plan. Regional windows, async records, E2E flow, DOD, and escalation paths gave the work one operating rhythm.',
       role: 'Global payments PMO / cross-cultural collaboration / agile transformation',
-      metrics: ['Delivered around 45% of 2022 global fiat payment programs', 'Covered APAC, Africa, and LATAM', 'Landed E2E flow and DOD'],
+      metrics: ['Delivered around 45% of 2022 global fiat payment projects', 'Covered APAC, Africa, and LATAM', 'Landed E2E flow and DOD'],
       tags: ['Global delivery', 'Fiat payment', 'Cross-region PMO'],
       details: {
         background:
-          'Binance fiat payment programs sat across compliance, risk, regional business, operations, and engineering, covering multiple regions at once.',
+          'Binance fiat payment projects sat across compliance, risk, regional business, operations, and engineering, covering multiple regions at once.',
         challenge:
           'The work involved time zones, different weekend patterns across regions, including the Middle East, and very limited overlapping hours.',
         role:
-          'I drove delivery for global fiat payment programs and helped the team move from isolated agile practices into end-to-end program management.',
+          'I drove delivery for global fiat payment projects and helped the team move from isolated agile practices into end-to-end program management.',
         actions: ['Set regional communication windows', 'Kept async records for key decisions', 'Aligned delivery through E2E flow and DOD', 'Built risk review and escalation paths'],
         systemBuilt: ['Regional collaboration rhythm', 'Async decision records', 'E2E project flow', 'DOD and risk audit mechanism'],
         result:
-          'In 2022, I delivered around 45% of global fiat payment programs and helped establish a more stable cross-region delivery standard.',
+          'In 2022, I delivered around 45% of global fiat payment projects and helped establish a more stable cross-region delivery standard.',
         reflection:
           'Global delivery depends on a reliable operating order. Distributed teams need enough context to make decisions, take ownership, and deliver.',
       },
@@ -700,7 +759,7 @@ const experiences = {
       summary: 'Gate.com 迁移、多业务线治理、RDER 部门项目管理、Card 业务、AI PMO 工作流。',
       paragraphs: [
         'Gate 的第一场重要项目，是 Gate.io 到 Gate.com 的品牌升级与域名迁移。项目发生在入职早期，时间紧、触点多，涉及 App、官网、活动页、社媒、邮件、客服、帮助中心和多语言站点。它看起来是一次域名切换，实际考验的是切换节奏、风险控制和跨团队协同。',
-        '我把项目拆成触点清单、切换窗口、验收截图和每日风险同步，确保每个团队知道自己负责什么、什么时候完成、如何确认结果。三周内完成迁移且无重大事故，也让我很快进入 Gate 的业务核心。',
+        '我把项目拆成触点清单、切换窗口、验收截图和每日风险同步，确保每个团队知道自己负责什么、什么时候完成、如何确认结果。三周内完成迁移且无重大事故，也让我快速熟悉了 Gate 的关键业务链路和跨团队协作关系。',
         '后续我的职责扩展到 RDER 一级部门的项目管理工作，包括 PM 分工、需求推进、状态看板、复盘和绩效反馈；同时我也直接负责 Card 业务项目。域名迁移中形成的节奏，逐渐延展成多项目组合治理的方法：让进展、风险、资源和关键判断持续被看见。',
       ],
       outcomes: ['3 周内完成迁移且无重大事故', 'SEO / GEO / ASO 项目组合治理', 'AI PMO 报告与风险识别提效'],
@@ -774,11 +833,11 @@ const experiences = {
       company: 'Gate',
       period: '2025 - Apr 2026',
       website: 'https://www.gate.com/',
-      role: 'P8 PMO / Multi-business Program Lead',
+      role: 'P8 PMO / Program Lead across Multiple Business Lines',
       summary: 'Gate.com migration, multi-business PMO governance, RDER department project management, Card business, and AI PMO workflows.',
       paragraphs: [
         'My first major project at Gate was the Gate.io to Gate.com brand and domain migration. It came early in my role, with a tight timeline and a wide touchpoint surface: app, website, campaign pages, social channels, email, support, help center, and multilingual sites. The work depended on cutover rhythm, risk control, and cross-team coordination.',
-        "I broke the work into touchpoint maps, cutover windows, screenshot checks, and daily risk reviews. Each team knew its owner, deadline, and validation method. The migration was completed in three weeks without major incidents, and it brought me straight into Gate's operating core.",
+        'I broke the work into touchpoint maps, cutover windows, screenshot checks, and daily risk reviews. Each team knew its owner, deadline, and validation method. The migration was completed in three weeks without major incidents and gave me a fast understanding of Gate’s key operating and cross-functional workflows.',
         'Later, my scope expanded to project management for the RDER department, including PM allocation, demand follow-up, status dashboards, retrospectives, and performance feedback. I also directly owned Card business programs. The rhythm built during the migration became the basis for a broader portfolio governance approach: making progress, risk, resources, and key decisions visible.',
       ],
       outcomes: ['Completed migration in three weeks without major incidents', 'Supported SEO / GEO / ASO portfolio governance', 'Reduced reporting and risk detection cycles with AI PMO'],
@@ -803,11 +862,11 @@ const experiences = {
       role: 'PMO / Global Fiat Payments',
       summary: 'Global fiat payments, cross-region delivery, compliance and risk collaboration, E2E flow, and DOD.',
       paragraphs: [
-        'Binance was a defining stage in my global delivery work. Fiat payment programs connected compliance, risk, regional business, operations, and engineering. A change in any one area could shift the program boundary. In 2022, I delivered around 45% of global fiat payment programs, which required steady control over rhythm, information, and risk.',
+        'Binance was a defining stage in my global delivery work. Fiat payment projects connected compliance, risk, regional business, operations, and engineering. A change in any one area could shift the project boundary. In 2022, I delivered around 45% of global fiat payment projects, which required steady control over rhythm, information, and risk.',
         'The work involved time zones, different weekend patterns across regions, including the Middle East, and limited overlapping hours across APAC, Africa, and LATAM. If issues moved only through meetings, context could be lost or arrive too late.',
         'I built a more stable operating rhythm: regional communication windows, async records for key decisions, E2E flow and DOD for delivery standards, and risk review with clear escalation paths. That experience shaped how I think about global delivery: distributed teams need enough context and a reliable operating order to make judgments, own decisions, and deliver.',
       ],
-      outcomes: ['Delivered about 45% of 2022 global fiat payment programs', 'Landed E2E flow and DOD', 'Improved cross-region information flow'],
+      outcomes: ['Delivered about 45% of 2022 global fiat payment projects', 'Landed E2E flow and DOD', 'Improved cross-region information flow'],
     },
     {
       company: 'Ctrip.com',
@@ -830,7 +889,7 @@ const experiences = {
       summary: 'App, web, and mini-program scope definition with Scrum, Kanban, Jira, and Confluence.',
       paragraphs: [
         'WeWork was an early test of project work in a fast-moving product environment. Requirements changed quickly, and teams had to balance fast validation with committed delivery.',
-        'App, web, and mini-program projects built my early cross-functional foundation. The first WeWork hot desk project also sharpened my understanding of early-stage delivery.',
+        'App, web, and mini-program projects built my early cross-functional foundation. I also worked on an early flexible-seat pilot, which sharpened my understanding of early-stage delivery.',
       ],
       outcomes: ['Built agile collaboration habits', 'Participated in early 0-1 delivery', 'Strengthened cross-functional communication'],
     },
@@ -860,7 +919,7 @@ const education = [
     zhLead: '更早的审计学习，让我先形成了结构感、严谨性和判断习惯，也影响了后来处理复杂项目的方式。',
     enLead: 'My auditing studies gave me early habits of structure, discipline, and evidence-based judgment that later shaped how I handled complex programs.',
     zhDegree: '本科｜审计学',
-    enDegree: 'Bachelor | Auditing',
+    enDegree: "Bachelor's Degree in Auditing",
     zhLocation: '中国｜成都',
     enLocation: 'Chengdu, China',
     period: '2012 - 2016',
@@ -873,7 +932,7 @@ const education = [
     zhPhase: '进阶',
     enPhase: 'Graduate Study',
     zhLead: '商业项目管理这段学习经历，承接了我早期的项目实践，也让我更系统地理解项目方法、业务判断与组织协同之间的关系。',
-    enLead: 'Commercial Project Management built on my early project experience and gave me a more structured understanding of project method, business judgment, and organizational coordination.',
+    enLead: 'Commercial Project Management built on my early project experience and gave me a more structured understanding of project management methods, business judgment, and organizational coordination.',
     zhTag: 'QS 2026 全球第 35',
     enTag: 'QS 2026 #35 Worldwide',
     zhDegree: '硕士｜商业项目管理',
@@ -959,6 +1018,217 @@ function ThemeToggle({
         ◌
       </button>
     </div>
+  );
+}
+
+function HeroCaseCarousel({ isZh }: { isZh: boolean }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const slides = isZh
+    ? [
+        {
+          id: 'gate-domain',
+          company: 'Gate' as BrandName,
+          titleFrom: 'Gate.io',
+          titleTo: 'Gate.com',
+          inputTitle: '覆盖触点',
+          inputs: ['App', '官网', '活动页', '社媒', '邮件', '客服', '帮助中心', '多语言站点'],
+          controlTitle: '治理控制',
+          controls: ['触点责任人', '切换窗口', '验收证据', '每日风险同步'],
+          outcomeTitle: '交付结果',
+          outcome: '3 周',
+          outcomeNote: '无重大事故',
+          linkLabel: '查看完整迁移案例',
+        },
+        {
+          id: 'design-delivery-automation',
+          company: 'Gate' as BrandName,
+          titleFrom: '需求表单',
+          titleTo: 'OKR 复盘',
+          inputTitle: '服务团队',
+          inputs: ['视觉', '影视', '品牌', '工业设计'],
+          controlTitle: '自动化流转',
+          controls: ['自动建单', '排单流转', '业务验收', '完结通知'],
+          outcomeTitle: '体系沉淀',
+          outcome: '一套系统',
+          outcomeNote: '交付与效能可复盘',
+          linkLabel: '查看设计交付案例',
+        },
+        {
+          id: 'ai-pmo',
+          company: 'Gate' as BrandName,
+          titleFrom: '项目数据',
+          titleTo: '决策支持',
+          inputTitle: '工作输入',
+          inputs: ['多维表格', 'Meegle', 'MCP', 'AI Skills'],
+          controlTitle: '辅助流程',
+          controls: ['信息结构化', '异常识别', '分析初稿', 'PM 校准'],
+          outcomeTitle: '产出效率',
+          outcome: '约 10 分钟',
+          outcomeNote: '形成周报与分析初稿',
+          linkLabel: '查看 AI PMO 案例',
+        },
+        {
+          id: 'binance-fiat',
+          company: 'Binance' as BrandName,
+          titleFrom: '区域协作',
+          titleTo: '全球交付',
+          inputTitle: '跨区现场',
+          inputs: ['亚太', '非洲', '拉美', '差异工作周'],
+          controlTitle: '协作机制',
+          controls: ['区域窗口', '异步记录', 'E2E 流程', '升级路径'],
+          outcomeTitle: '年度交付',
+          outcome: '约 45%',
+          outcomeNote: '2022 全球法币支付项目',
+          linkLabel: '查看全球支付案例',
+        },
+      ]
+    : [
+        {
+          id: 'gate-domain',
+          company: 'Gate' as BrandName,
+          titleFrom: 'Gate.io',
+          titleTo: 'Gate.com',
+          inputTitle: 'Touchpoints',
+          inputs: ['App', 'Website', 'Campaigns', 'Social', 'Email', 'Support', 'Help center', 'Localized sites'],
+          controlTitle: 'Governance controls',
+          controls: ['Touchpoint owners', 'Cutover windows', 'Validation evidence', 'Daily risk review'],
+          outcomeTitle: 'Outcome',
+          outcome: '3 weeks',
+          outcomeNote: 'No major incidents',
+          linkLabel: 'View the full migration case',
+        },
+        {
+          id: 'design-delivery-automation',
+          company: 'Gate' as BrandName,
+          titleFrom: 'Intake forms',
+          titleTo: 'OKR review',
+          inputTitle: 'Teams served',
+          inputs: ['Visual', 'Video', 'Brand', 'Industrial design'],
+          controlTitle: 'Automated flow',
+          controls: ['Task creation', 'Work allocation', 'Business review', 'Completion notice'],
+          outcomeTitle: 'System built',
+          outcome: 'One system',
+          outcomeNote: 'Delivery and performance ready for review',
+          linkLabel: 'View design delivery case',
+        },
+        {
+          id: 'ai-pmo',
+          company: 'Gate' as BrandName,
+          titleFrom: 'Project data',
+          titleTo: 'Decision support',
+          inputTitle: 'Workflow inputs',
+          inputs: ['Multidimensional tables', 'Meegle', 'MCP', 'AI Skills'],
+          controlTitle: 'Assisted workflow',
+          controls: ['Structure inputs', 'Flag anomalies', 'Draft analysis', 'PM review'],
+          outcomeTitle: 'Output time',
+          outcome: '~10 min',
+          outcomeNote: 'Reporting and analysis drafts',
+          linkLabel: 'View AI PMO case',
+        },
+        {
+          id: 'binance-fiat',
+          company: 'Binance' as BrandName,
+          titleFrom: 'Regional teams',
+          titleTo: 'Global delivery',
+          inputTitle: 'Operating context',
+          inputs: ['APAC', 'Africa', 'LATAM', 'Different workweeks'],
+          controlTitle: 'Delivery rhythm',
+          controls: ['Regional windows', 'Async records', 'E2E process', 'Escalation paths'],
+          outcomeTitle: 'Annual delivery',
+          outcome: '~45%',
+          outcomeNote: 'of 2022 global fiat payment projects',
+          linkLabel: 'View global payments case',
+        },
+      ];
+  const activeSlide = slides[activeIndex];
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [isZh]);
+
+  useEffect(() => {
+    if (isPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % slides.length);
+    }, 7000);
+    return () => window.clearInterval(timer);
+  }, [isPaused, slides.length]);
+
+  const showPrevious = () => setActiveIndex((current) => (current - 1 + slides.length) % slides.length);
+  const showNext = () => setActiveIndex((current) => (current + 1) % slides.length);
+
+  return (
+    <aside
+      className="hero-governance-map hero-case-carousel"
+      aria-label={isZh ? '代表案例轮播' : 'Selected case carousel'}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsPaused(false);
+      }}
+    >
+      <div className="hero-map-slide" key={`${isZh ? 'zh' : 'en'}-${activeSlide.id}`}>
+        <div className="hero-map-header">
+          <div>
+            <p>{isZh ? '代表案例' : 'Selected case'} / {String(activeIndex + 1).padStart(2, '0')}</p>
+            <h2>{activeSlide.titleFrom} <ArrowRight className="h-5 w-5" /> {activeSlide.titleTo}</h2>
+          </div>
+          <BrandLogo company={activeSlide.company} size="sm" />
+        </div>
+        <div className="hero-map-flow">
+          <section className="hero-map-stage hero-map-inputs">
+            <span className="hero-map-step">01</span>
+            <h3>{activeSlide.inputTitle}</h3>
+            <div className="hero-map-tags">
+              {activeSlide.inputs.map((item) => <span key={item}>{item}</span>)}
+            </div>
+          </section>
+          <span className="hero-map-connector" aria-hidden="true"><ArrowRight className="h-5 w-5" /></span>
+          <section className="hero-map-stage hero-map-controls">
+            <span className="hero-map-step">02</span>
+            <h3>{activeSlide.controlTitle}</h3>
+            <ul>
+              {activeSlide.controls.map((item) => <li key={item}><ShieldCheck className="h-4 w-4" />{item}</li>)}
+            </ul>
+          </section>
+          <span className="hero-map-connector" aria-hidden="true"><ArrowRight className="h-5 w-5" /></span>
+          <section className="hero-map-stage hero-map-outcome">
+            <span className="hero-map-step">03</span>
+            <h3>{activeSlide.outcomeTitle}</h3>
+            <strong>{activeSlide.outcome}</strong>
+            <p>{activeSlide.outcomeNote}</p>
+          </section>
+        </div>
+      </div>
+      <div className="hero-map-footer">
+        <a href={`#case-${activeSlide.id}`} className="hero-map-link">
+          <span>{activeSlide.linkLabel}</span>
+          <ArrowRight className="h-4 w-4" />
+        </a>
+        <div className="hero-carousel-controls" aria-label={isZh ? '切换代表案例' : 'Change selected case'}>
+          <button type="button" className="hero-carousel-arrow" onClick={showPrevious} aria-label={isZh ? '上一个案例' : 'Previous case'} title={isZh ? '上一个案例' : 'Previous case'}>
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <div className="hero-carousel-dots">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                className={`hero-carousel-dot${index === activeIndex ? ' is-active' : ''}`}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`${isZh ? '查看案例' : 'View case'} ${index + 1}: ${slide.titleFrom} ${slide.titleTo}`}
+                aria-current={index === activeIndex ? 'true' : undefined}
+              />
+            ))}
+          </div>
+          <button type="button" className="hero-carousel-arrow" onClick={showNext} aria-label={isZh ? '下一个案例' : 'Next case'} title={isZh ? '下一个案例' : 'Next case'}>
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </aside>
   );
 }
 
@@ -1162,7 +1432,7 @@ function renderMarkdownDocument(markdown: string) {
 
     const headingMatch = raw.match(/^(#{1,6})\s+(.+)$/);
     if (headingMatch) {
-      const level = Math.min(6, headingMatch[1].length);
+      const level = Math.min(6, headingMatch[1].length + 1);
       const text = headingMatch[2].trim();
       const Tag = `h${level}` as keyof JSX.IntrinsicElements;
       blocks.push(<Tag key={`h-${blocks.length}`}>{renderInlineMarkdown(text, `h-${blocks.length}`)}</Tag>);
@@ -1294,14 +1564,14 @@ export default function App() {
   });
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') {
-      return 'dark';
+      return 'light';
     }
 
     try {
       const savedTheme = window.localStorage.getItem('cyril-site-theme');
-      return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'dark';
+      return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
   const [expandedCase, setExpandedCase] = useState<string | null>(null);
@@ -1348,6 +1618,8 @@ export default function App() {
     } catch {
       return;
     }
+
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
   }, [language]);
 
   useEffect(() => {
@@ -1557,6 +1829,7 @@ export default function App() {
                 <ArrowRight className="h-4 w-4" />
               </a>
             </div>
+            <HeroCaseCarousel isZh={isZh} />
           </div>
         </section>
 
@@ -1571,7 +1844,7 @@ export default function App() {
           </div>
 
           <div className="case-study-stack mt-14">
-            {cases.map((item) => {
+            {cases.map((item, index) => {
               const isOpen = expandedCase === item.id;
               const detailRows = [
                 [isZh ? '业务背景' : 'Background', item.details.background],
@@ -1580,9 +1853,32 @@ export default function App() {
                 [isZh ? '结果' : 'Result', item.details.result],
                 [isZh ? '方法沉淀' : 'Reflection', item.details.reflection],
               ];
+              const groupHeading =
+                index === 0
+                  ? {
+                      title: isZh ? '重点案例' : 'Flagship cases',
+                      body: isZh
+                        ? '品牌迁移、设计交付自动化与增长项目集，集中呈现我在 Gate 阶段形成的治理方法。'
+                        : 'Brand migration, design delivery automation, and growth portfolio work shaped my operating model at Gate.',
+                    }
+                  : index === 3
+                    ? {
+                        title: isZh ? '延展现场' : 'Additional contexts',
+                        body: isZh
+                          ? '从国际化落地到全球支付，项目判断在不同市场与协作环境中继续生长。'
+                          : 'International launches and global payments tested the same judgment across markets and operating contexts.',
+                      }
+                    : null;
 
               return (
-                <article key={item.id} className="case-chapter">
+                <Fragment key={item.id}>
+                  {groupHeading ? (
+                    <div className={`case-group-heading ${index === 3 ? 'is-secondary' : ''}`}>
+                      <span>{groupHeading.title}</span>
+                      <p>{groupHeading.body}</p>
+                    </div>
+                  ) : null}
+                  <article id={`case-${item.id}`} className={`case-chapter ${index < 3 ? 'is-featured' : 'is-supporting'}`}>
                   <div className="case-copy">
                     <p className="case-eyebrow">{item.label}</p>
                     <h3>{item.title}</h3>
@@ -1652,7 +1948,8 @@ export default function App() {
                       </div>
                     </div>
                   </div>
-                </article>
+                  </article>
+                </Fragment>
               );
             })}
           </div>
@@ -1806,7 +2103,7 @@ export default function App() {
               <Mail className="h-4 w-4" />
               lbxcyril@gmail.com
             </a>
-            <a href="https://www.linkedin.com/feed/" target="_blank" rel="noreferrer">
+            <a href="https://www.linkedin.com/in/baixiliu/" target="_blank" rel="noreferrer">
               <ExternalLink className="h-4 w-4" />
               {t.linkedin}
             </a>
