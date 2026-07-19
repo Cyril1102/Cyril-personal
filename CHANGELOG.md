@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.3] - 2026-07-19
+
+### Improved
+
+- Refined the refreshed visual system across homepage, methodology, career path, and case detail pages.
+- Reduced legacy green accents, improved light-mode contrast, and softened the page background grid.
+- Standardized case-page overviews, metrics, buttons, tags, and section spacing for more consistent reading across desktop and mobile.
+- Added missing image alternative text and tightened copy where labels or internal-style wording appeared on public pages.
+
 ## [1.1.2] - 2026-07-19
 
 ### Added

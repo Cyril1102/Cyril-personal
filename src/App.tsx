@@ -396,6 +396,24 @@ type CaseStudy = {
   label: string;
   title: string;
   summary: string;
+  overview: {
+    project: string;
+    ownership: string;
+    constraint: string;
+    outcome: string;
+  };
+  concept?: {
+    label: string;
+    title: string;
+    intro: string;
+    items: Array<{
+      term: string;
+      title: string;
+      description: string;
+    }>;
+    foundationLabel: string;
+    foundation: string;
+  };
   role: string;
   metrics: string[];
   tags: string[];
@@ -421,13 +439,19 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'gate-domain',
       company: 'Gate',
-      label: 'Case 01 / 品牌焕新与域名迁移',
+      label: '案例 01 / 品牌焕新与域名迁移',
       title: '3 周完成一次全站级品牌切换',
       summary:
-        'Gate.io 到 Gate.com 牵动 App、官网、活动页、社媒、邮件、客服、帮助中心和多语言站点。我负责把这次高风险切换整理成一套清楚的推进节奏。',
+        'Gate.io 到 Gate.com 牵动应用端、官网、活动页、社媒、邮件、客服、帮助中心和多语言站点。我负责把这次高风险切换整理成一套清楚的推进节奏。',
+      overview: {
+        project: 'Gate.io 向 Gate.com 的品牌升级与域名迁移，覆盖应用端、官网、活动页、社媒、邮件、客服、帮助中心及多语言站点。',
+        ownership: '我作为项目负责人统筹触点盘点、责任分工、切换窗口、风险同步、验收证据和管理层进展视图。',
+        constraint: '项目在入职早期启动，只有三周窗口；任何外部入口遗漏或延迟，都会直接影响用户体验与品牌一致性。',
+        outcome: '全站迁移按期完成且无重大事故，形成的触点清单和验收机制也成为后续多项目治理的基础。',
+      },
       role: '项目负责人 / 跨团队协调 / 风险与验收机制设计',
       metrics: ['3 周完成迁移', '无重大事故', '覆盖多端、多语言、多触点'],
-      tags: ['Brand migration', 'Risk control', 'Cutover governance'],
+      tags: ['品牌迁移', '风险控制', '切换治理'],
       announcement: {
         label: '官方公告',
         title: '查看 Gate 品牌焕新公告',
@@ -451,28 +475,58 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'ai-pmo',
       company: 'Gate',
-      label: 'Case 02 / AI + PMO 自动化',
+      label: '案例 02 / AI + PMO 自动化',
       title: '把高频 PMO 工作整理成可复用流程',
       summary:
-        '多业务线并行后，周报、迭代分析和风险梳理占掉了很多重复时间。我把飞书多维表格、Meegle、MCP 和 AI Skills 接进流程，先整理信息，再由 PM 完成判断，并把 SEO 关键词采集、内容生成和效果复盘串成一条工作流。',
+        '多业务线并行后，周报、迭代分析和风险梳理占掉了很多重复时间。我把飞书多维表格、Meegle、MCP 和 AI 技能接进流程，先整理信息，再由 PM 完成判断，并把 SEO 关键词采集、内容生成和效果复盘串成一条工作流。',
+      overview: {
+        project: '围绕多业务线周报、迭代分析、风险梳理和 SEO 内容运营，我搭建了由飞书多维表格、Meegle、MCP 与 AI 技能组成的辅助工作流。',
+        ownership: '我负责梳理数据结构、定义风险字段与输出模板，并把关键词采集、内容生成和效果复盘接入同一条流程。',
+        constraint: '项目数据分散在不同工具和团队中，自动化还必须保留 PM 对信息质量、优先级和风险取舍的最终判断。',
+        outcome: '周报与分析初稿可在约十分钟内形成，SEO 运营形成连续闭环，重复整理时间明显减少。',
+      },
+      concept: {
+        label: '流程关系',
+        title: 'AI 辅助工作流如何分工',
+        intro: '项目数据先进入统一结构，工具连接、初稿生成和最终判断各有明确责任，自动化才不会放大原有的信息问题。',
+        items: [
+          {
+            term: 'MCP',
+            title: '连接工具与数据',
+            description: '让 AI 在受控接口中读取项目数据，并调用既定工具完成处理。',
+          },
+          {
+            term: 'AI 技能',
+            title: '执行可复用步骤',
+            description: '按照固定规则整理信息、识别异常，并生成周报或分析初稿。',
+          },
+          {
+            term: 'PM 判断',
+            title: '完成校验与取舍',
+            description: '确认信息质量，判断优先级和风险，再决定沟通与推进动作。',
+          },
+        ],
+        foundationLabel: '责任边界',
+        foundation: '自动化承担整理和初稿，PM 保留判断、决策与沟通责任',
+      },
       role: 'AI PMO 实践者 / 自动化流程设计 / 项目数据分析',
       metrics: ['周报与分析初稿约 10 分钟生成', '串联 SEO 关键词采集与内容复盘', '沉淀 AI 辅助 PMO 流程'],
-      tags: ['AI workflow', 'Reporting automation', 'Risk signal'],
+      tags: ['AI 工作流', '汇报自动化', '风险识别'],
       details: {
         background:
           '多业务线并行后，信息流转和汇报成本很快上升。只靠手工整理，很难支撑稳定输出。',
         challenge:
-          '需求散在不同工具和团队里，周报、Sprint 分析和风险识别都依赖人工汇总，既慢，也容易漏。',
+          '需求散在不同工具和团队里，周报、迭代分析和风险识别都依赖人工汇总，既慢，也容易漏。',
         role:
           '我设计并推动一套 AI 辅助流程，把项目数据、需求流转和报告初稿先整理出来，再交给 PM 校准判断。',
         actions: [
           '梳理飞书多维表格与 Meegle 数据结构',
-          '用 MCP 和 AI Skills 生成周报与分析初稿',
+          '用 MCP 和 AI 技能生成周报与分析初稿',
           '把 SEO 关键词采集、产文和复盘串成一条增长工作流',
           '建立风险识别字段和输出模板',
           '把 PM 判断保留在最终取舍环节',
         ],
-        systemBuilt: ['SEO 关键词采集到内容复盘工作流', '周报初稿生成流程', 'Sprint 分析模板', '风险识别与升级清单'],
+        systemBuilt: ['SEO 关键词采集到内容复盘工作流', '周报初稿生成流程', '迭代分析模板', '风险识别与升级清单'],
         result:
           '周报、迭代分析和风险梳理的初稿可以在约 10 分钟内形成，PM 随后完成校准、取舍和沟通。',
         reflection:
@@ -482,13 +536,43 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'design-delivery-automation',
       company: 'Gate',
-      label: 'Case 03 / 设计交付体系自动化',
+      label: '案例 03 / 设计交付体系自动化',
       title: '从需求表单到 OKR 复盘：设计团队交付体系自动化',
       summary:
         '视觉、影视、品牌和工业设计团队每天承接大量来自业务侧的设计需求。我把表单、多维表格、Meegle 和 OKR 数据串起来，让需求提交、自动建单、排单流转、验收确认和效能复盘进入同一套工作系统。',
+      overview: {
+        project: '为视觉、影视、品牌和工业设计团队搭建设计交付系统，贯通业务提需、结构化收集、自动建单、排单流转、验收确认和 OKR 复盘。',
+        ownership: '我负责梳理完整交付链路，设计提需表单和多维表格需求池，并通过 API 将需求同步至 Meegle。',
+        constraint: '周均两百余项需求来自多个业务方向，早期入口分散，建单、分单、追状态和完结通知高度依赖人工。',
+        outcome: '系统稳定支撑周均 200+ 需求流转，减少重复协调，并让进度、响应效率、团队产能和目标完成情况可以持续复盘。',
+      },
+      concept: {
+        label: '系统关系',
+        title: '一条需求如何完成流转',
+        intro: '三个工具分别负责需求入口、交付过程和目标复盘。需求编号贯穿其中，减少重复建单和状态追问。',
+        items: [
+          {
+            term: '多维表格',
+            title: '统一需求入口',
+            description: '承接表单信息，统一记录需求背景、交付物、时限和验收口径。',
+          },
+          {
+            term: 'Meegle',
+            title: '管理任务与交付',
+            description: '自动建单后完成排单、流转、业务验收、交付确认和完结通知。',
+          },
+          {
+            term: 'OKR',
+            title: '连接目标与复盘',
+            description: '用真实交付数据观察进度、响应效率、团队产能和目标完成情况。',
+          },
+        ],
+        foundationLabel: '贯穿主线',
+        foundation: '同一需求编号连接提需、任务、验收和目标数据',
+      },
       role: '设计团队 PMO / 流程自动化设计 / 交付效能管理',
       metrics: ['支撑周均 200+ 设计需求流转', '表单到 Meegle 自动建单', '交付进度与 OKR 数据可复盘'],
-      tags: ['Design operations', 'Meegle automation', 'Delivery analytics'],
+      tags: ['设计运营', 'Meegle 自动化', '交付效能分析'],
       details: {
         background:
           'Gate 的设计团队服务多个业务方向，需求入口多、交付节奏快，视觉、影视、品牌和工业设计团队都需要稳定承接业务侧需求。',
@@ -513,13 +597,43 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'growth-portfolio',
       company: 'Gate',
-      label: 'Case 04 / 增长项目集管理',
+      label: '案例 04 / 增长项目集管理',
       title: '把散点增长需求收束成项目组合',
       summary:
         'SEO、GEO、ASO 更像一组持续变化的增长项目组合。我建立需求池、排期、风险预警、数据看板和管理层周报，让它们进入同一套管理视图。',
+      overview: {
+        project: '将 SEO、GEO、ASO 及相关内容、技术、产品和数据需求纳入统一的增长项目组合，建立持续治理的管理视图。',
+        ownership: '我负责汇总需求、判断优先级、安排组合排期，并建立风险预警、依赖跟踪、数据看板和管理层周报。',
+        constraint: '需求来源多、变化快，各团队都强调紧迫性；资源有限，投入方向和指标归因也需要持续校准。',
+        outcome: '增长工作从散点需求进入统一组合，核心指标阶段性增长，部分指标在相应周期内接近翻倍。',
+      },
+      concept: {
+        label: '概念关系',
+        title: '三个入口，一套增长基础',
+        intro: 'SEO、GEO、ASO 面向不同的用户发现入口，却会共同调用内容、技术、品牌和数据资源。把它们放进同一项目组合，才能看清投入冲突、依赖关系和整体回报。',
+        items: [
+          {
+            term: 'SEO',
+            title: '搜索引擎发现',
+            description: '帮助网站内容被搜索引擎理解、收录，并在相关搜索结果中获得可见度。',
+          },
+          {
+            term: 'GEO',
+            title: '生成式答案引用',
+            description: '提升内容在生成式引擎回答中的可见度、引用机会和信息影响力。',
+          },
+          {
+            term: 'ASO',
+            title: '应用商店发现与转化',
+            description: '优化应用的关键词、元数据和产品页呈现，支持商店内发现与下载转化。',
+          },
+        ],
+        foundationLabel: '共享基础',
+        foundation: '内容资产 · 技术可访问性 · 品牌与实体一致性 · 数据反馈',
+      },
       role: '增长型 PMO / 项目组合治理 / 管理层汇报',
       metrics: ['建立统一增长项目组合', '核心指标阶段性增长', '部分指标在阶段内接近翻倍'],
-      tags: ['SEO / GEO / ASO', 'Portfolio governance', 'Growth PMO'],
+      tags: ['SEO / GEO / ASO', '项目组合治理', '增长型 PMO'],
       details: {
         background:
           '增长项目往往来源多、变化快，内容、技术、产品、数据和区域团队都会提出需求。',
@@ -538,13 +652,43 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'coins-localization',
       company: 'Coins.ph',
-      label: 'Case 05 / 多国家本地化与合规',
+      label: '案例 05 / 多国家本地化与合规',
       title: '在多国监管条件里找到上线路径',
       summary:
         '澳大利亚、巴西、欧洲的上线条件各不相同。监管、KYC、法币链路、钱包隔离和合作方节奏都会改写项目边界。我把这些变化整理成优先级、风险、依赖和下一步责任人。',
-      role: '国际化 PMO / 合规协作 / GTM 项目管理',
+      overview: {
+        project: '推动澳大利亚、巴西、欧洲等市场的本地化与合规上线，范围覆盖交易能力、KYC、法币链路、钱包隔离及上线验收。',
+        ownership: '我协调产品、研发、合规、法务、运营和外部合作方，把市场进入条件整理成优先级、风险、依赖与责任路径。',
+        constraint: '不同市场的监管判断和合作方节奏持续变化，项目边界需要在合规要求、产品方案和上线窗口之间反复校准。',
+        outcome: '多国项目按计划推进，交付周期缩短约 15%，Crypto on Credit 也完成从方案到上线验收的闭环。',
+      },
+      concept: {
+        label: '概念关系',
+        title: '本地化上线的三个约束',
+        intro: '市场上线会同时受到身份验证、资金通道和资产管理方式影响。任何一项发生变化，产品方案和验收路径都要随之调整。',
+        items: [
+          {
+            term: 'KYC',
+            title: '用户身份验证',
+            description: '根据当地监管要求确认用户身份、风险等级和可使用的产品范围。',
+          },
+          {
+            term: '法币链路',
+            title: '资金进出通道',
+            description: '连接银行、支付机构和交易能力，并满足当地结算与合规要求。',
+          },
+          {
+            term: '钱包隔离',
+            title: '资产边界管理',
+            description: '按照市场与监管要求划分资产和账户边界，降低混用风险。',
+          },
+        ],
+        foundationLabel: '上线条件',
+        foundation: '合规、产品、技术和运营共同确认后，市场才进入上线验收',
+      },
+      role: '国际化 PMO / 合规协作 / 市场进入项目管理',
       metrics: ['支持多国家市场拓展', '交付周期缩短约 15%', 'Crypto on Credit 完成上线闭环'],
-      tags: ['Localization', 'Compliance', 'Market expansion'],
+      tags: ['本地化', '合规管理', '市场拓展'],
       details: {
         background:
           'Coins.ph 阶段的主线，是澳大利亚、巴西、欧洲等市场的国际化拓展。',
@@ -563,13 +707,43 @@ const caseStudies: Record<Language, CaseStudy[]> = {
     {
       id: 'binance-fiat',
       company: 'Binance',
-      label: 'Case 06 / 全球法币支付',
+      label: '案例 06 / 全球法币支付',
       title: '让全球支付项目在时区和规则差异中交付',
       summary:
         '全球法币支付项目牵动合规、风控、区域业务、运营和研发。时区、工作周和监管判断都会改写交付边界。我用区域窗口、异步记录、E2E 流程、DOD 和升级机制，把分散团队纳入同一套协作秩序。',
+      overview: {
+        project: '负责覆盖亚非拉多区域的全球法币支付项目，协同合规、风控、区域业务、运营、产品和研发推进交付。',
+        ownership: '我负责项目节奏、跨区域对齐、风险升级和交付标准建设，并推动 E2E 流程、DOD 与异步决策记录落地。',
+        constraint: '团队分布在多个时区，中东工作周与其他区域不同，监管判断也会改变方案，真正重叠的协作窗口十分有限。',
+        outcome: '我在 2022 年交付约 45% 的全球法币支付项目，同时帮助团队形成更稳定的跨区域协作与交付标准。',
+      },
+      concept: {
+        label: '概念关系',
+        title: '跨区域协作的共同标准',
+        intro: '时区和工作周难以统一时，团队需要用共同流程、完成标准和可追溯记录维持交付连续性。',
+        items: [
+          {
+            term: 'E2E',
+            title: '端到端流程',
+            description: '从需求进入到上线验收明确每个阶段的责任、输入和交付物。',
+          },
+          {
+            term: 'DOD',
+            title: '完成标准',
+            description: '让不同地区和职能对“完成”形成同一判断，减少返工和交接偏差。',
+          },
+          {
+            term: '异步记录',
+            title: '保留判断依据',
+            description: '记录关键决定、风险和下一步责任人，让非重叠时区也能继续推进。',
+          },
+        ],
+        foundationLabel: '协作基础',
+        foundation: '区域沟通窗口和风险升级路径支撑共同标准持续运行',
+      },
       role: '全球支付 PMO / 跨文化协作 / 敏捷转型',
       metrics: ['交付 2022 年约 45% 全球法币支付项目', '覆盖亚非拉多区域', '推动 E2E 流程与 DOD'],
-      tags: ['Global delivery', 'Fiat payment', 'Cross-region PMO'],
+      tags: ['全球交付', '法币支付', '跨区域 PMO'],
       details: {
         background:
           'Binance 的法币支付项目处在合规、风控、区域业务、运营和研发的交叉点，覆盖亚非拉等多个区域。',
@@ -594,6 +768,12 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       title: 'A full-site brand cutover completed in three weeks',
       summary:
         'The move from Gate.io to Gate.com touched every customer-facing surface: app, website, campaign pages, social channels, email, support, help center, and multilingual pages. I turned that change into a coordinated three-week cutover.',
+      overview: {
+        project: 'Gate’s brand and domain migration moved Gate.io to Gate.com across the app, website, campaigns, social channels, email, support, help center, and multilingual pages.',
+        ownership: 'As project lead, I coordinated the touchpoint map, owners, cutover windows, risk reviews, validation evidence, and leadership updates.',
+        constraint: 'The program began early in my tenure with a three-week window. Any missed or delayed public entry point could affect customers and weaken brand consistency.',
+        outcome: 'The full-site migration landed on time with no major incidents. Its control sheet and validation model also informed later portfolio governance work.',
+      },
       role: 'Project lead / cross-team coordination / risk and validation',
       metrics: ['Completed in three weeks', 'No major incidents', 'Multi-surface and multilingual scope'],
       tags: ['Brand migration', 'Risk control', 'Cutover governance'],
@@ -625,6 +805,36 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       title: 'Turning repeated PMO work into a reusable workflow',
       summary:
         'Parallel business lines made weekly reporting, sprint analysis, and risk review increasingly repetitive. I used Feishu Bitable, Meegle, MCP, and AI Skills to structure the inputs while PMs kept the final judgment. I also connected keyword research, content production, and performance review into one SEO workflow.',
+      overview: {
+        project: 'I built AI-assisted workflows for weekly reporting, sprint analysis, risk review, and SEO operations across parallel business lines.',
+        ownership: 'I structured the data, defined risk fields and output templates, and connected keyword research, content production, and performance review.',
+        constraint: 'Inputs were spread across teams and tools. Automation also had to preserve the PM’s final judgment on quality, priority, and risk.',
+        outcome: 'Report and analysis drafts could be prepared in about ten minutes, SEO work gained a continuous loop, and repetitive consolidation dropped significantly.',
+      },
+      concept: {
+        label: 'Workflow relationship',
+        title: 'How the AI-assisted workflow divides responsibility',
+        intro: 'Project data enters a shared structure first. Tool access, draft generation, and final judgment each have a clear owner.',
+        items: [
+          {
+            term: 'MCP',
+            title: 'Connect tools and data',
+            description: 'Gives AI controlled access to project data and approved tools.',
+          },
+          {
+            term: 'AI skills',
+            title: 'Run repeatable steps',
+            description: 'Structures information, flags anomalies, and prepares report or analysis drafts.',
+          },
+          {
+            term: 'PM judgment',
+            title: 'Validate and decide',
+            description: 'Checks quality, weighs priority and risk, then chooses the communication and delivery action.',
+          },
+        ],
+        foundationLabel: 'Responsibility',
+        foundation: 'Automation handles structure and drafts; PMs retain judgment, decisions, and communication',
+      },
       role: 'AI PMO / workflow design / project data analysis',
       metrics: ['Report and analysis drafts in about 10 minutes', 'SEO workflow from keyword research to review', 'Reusable AI-assisted PMO workflow'],
       tags: ['AI workflow', 'Reporting automation', 'Risk signal'],
@@ -656,6 +866,36 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       title: 'From intake forms to OKR review: an automated design delivery system',
       summary:
         'Visual, video, brand, and industrial design teams handled a constant flow of requests. I connected intake forms, Bitable, Meegle, and OKR data into one system for task creation, scheduling, acceptance, delivery confirmation, and performance review.',
+      overview: {
+        project: 'I built a delivery system for visual, video, brand, and industrial design teams, covering intake, structured demand, task creation, scheduling, acceptance, and OKR review.',
+        ownership: 'I mapped the end-to-end workflow, designed the intake form and Bitable demand pool, and used APIs to create Meegle tasks automatically.',
+        constraint: 'More than 200 weekly requests came from several business lines, while task creation, assignment, status chasing, and completion notices relied heavily on manual work.',
+        outcome: 'The system supported the weekly demand volume, reduced coordination overhead, and made progress, response time, capacity, and goal completion measurable.',
+      },
+      concept: {
+        label: 'System relationship',
+        title: 'How one request moves through the system',
+        intro: 'Each tool owns a different part of the flow: intake, delivery, or goal review. A shared request ID keeps them connected.',
+        items: [
+          {
+            term: 'Bitable',
+            title: 'Shared intake',
+            description: 'Captures context, deliverables, timing, and acceptance criteria in one demand pool.',
+          },
+          {
+            term: 'Meegle',
+            title: 'Task and delivery flow',
+            description: 'Handles task creation, scheduling, routing, acceptance, confirmation, and completion notices.',
+          },
+          {
+            term: 'OKR',
+            title: 'Goals and review',
+            description: 'Uses delivery data to review progress, response time, capacity, and goal completion.',
+          },
+        ],
+        foundationLabel: 'Common thread',
+        foundation: 'One request ID connects intake, task execution, acceptance, and goal data',
+      },
       role: 'Design team PMO / workflow automation / delivery performance management',
       metrics: ['Supported 200+ design requests per week', 'Automated task creation from intake to Meegle', 'Delivery and OKR data ready for review'],
       tags: ['Design operations', 'Meegle automation', 'Delivery analytics'],
@@ -687,6 +927,36 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       title: 'Turning scattered growth requests into a portfolio',
       summary:
         'SEO, GEO, and ASO never behaved like a single project. I organized them as a portfolio, with demand pools, scheduling, risk alerts, dashboards, and executive reporting.',
+      overview: {
+        project: 'I brought SEO, GEO, ASO, and related content, technical, product, and data work into one governed growth portfolio.',
+        ownership: 'I consolidated demand, set priorities and schedules, and established risk alerts, dependency tracking, dashboards, and executive reporting.',
+        constraint: 'Requests arrived quickly from many teams, often marked urgent. Limited capacity and uncertain attribution required regular recalibration.',
+        outcome: 'The work moved from scattered requests into one portfolio. Key metrics grew during the period, with some indicators nearly doubling.',
+      },
+      concept: {
+        label: 'What is / How they connect',
+        title: 'Three discovery surfaces, one growth foundation',
+        intro: 'SEO, GEO, and ASO reach users through different discovery surfaces. They still draw on the same content, technical, brand, and data resources, which makes portfolio-level trade-offs essential.',
+        items: [
+          {
+            term: 'SEO',
+            title: 'Search discovery',
+            description: 'Helps search engines understand and index web content, improving visibility for relevant queries.',
+          },
+          {
+            term: 'GEO',
+            title: 'Generative answer visibility',
+            description: 'Improves the chance that content appears, is cited, or shapes answers produced by generative engines.',
+          },
+          {
+            term: 'ASO',
+            title: 'App store discovery',
+            description: 'Improves app store visibility and conversion through keywords, metadata, and product-page presentation.',
+          },
+        ],
+        foundationLabel: 'Shared foundation',
+        foundation: 'Content assets · technical access · brand and entity consistency · performance data',
+      },
       role: 'Growth PMO / portfolio governance / executive reporting',
       metrics: ['One governed growth portfolio', 'Key metrics grew during the period', 'Some indicators nearly doubled'],
       tags: ['SEO / GEO / ASO', 'Portfolio governance', 'Growth PMO'],
@@ -712,6 +982,36 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       title: 'Finding the launch path across different market rules',
       summary:
         'Australia, Brazil, and Europe each had different launch conditions. I translated changing rules around KYC, fiat rails, wallets, partners, and acceptance into priorities, risks, dependencies, and owners.',
+      overview: {
+        project: 'I supported localization and compliant launches across Australia, Brazil, Europe, and related markets, covering KYC, fiat rails, wallet setup, and launch acceptance.',
+        ownership: 'I coordinated product, engineering, compliance, legal, operations, and external partners, turning market-entry conditions into priorities, risks, dependencies, and owners.',
+        constraint: 'Regulatory interpretation and partner timelines changed by market, so the delivery path had to be recalibrated as requirements evolved.',
+        outcome: 'The multi-market work progressed as planned, delivery cycles shortened by about 15%, and Crypto on Credit reached launch acceptance.',
+      },
+      concept: {
+        label: 'Concept relationship',
+        title: 'Three constraints on a localized launch',
+        intro: 'Identity checks, payment rails, and asset boundaries all shape the launch path. A change in one can alter the product and acceptance plan.',
+        items: [
+          {
+            term: 'KYC',
+            title: 'Identity verification',
+            description: 'Applies local rules to user identity, risk level, and product eligibility.',
+          },
+          {
+            term: 'Fiat rails',
+            title: 'Money movement',
+            description: 'Connects banks, payment partners, and trading capability under local settlement and compliance rules.',
+          },
+          {
+            term: 'Wallet separation',
+            title: 'Asset boundaries',
+            description: 'Separates accounts and assets by market or regulatory requirement to reduce commingling risk.',
+          },
+        ],
+        foundationLabel: 'Launch condition',
+        foundation: 'Compliance, product, engineering, and operations sign off before launch acceptance',
+      },
       role: 'International PMO / compliance coordination / go-to-market delivery',
       metrics: ['Supported multi-country expansion', 'Delivery cycles shortened by about 15%', 'Crypto on Credit moved from concept to launch'],
       tags: ['Localization', 'Compliance', 'Market expansion'],
@@ -737,6 +1037,36 @@ const caseStudies: Record<Language, CaseStudy[]> = {
       title: 'Delivering global payments across time zones and rule differences',
       summary:
         'Global fiat payments connected compliance, risk, regional business, operations, and engineering. Time zones, different work weeks, and changing regulation shaped every delivery plan. Regional windows, async records, E2E flow, DOD, and escalation paths gave the work one operating rhythm.',
+      overview: {
+        project: 'I led global fiat payment delivery across APAC, Africa, and LATAM, coordinating compliance, risk, regional business, operations, product, and engineering.',
+        ownership: 'I ran the delivery cadence, aligned regions, escalated risk, and helped establish E2E flows, DOD, and asynchronous decision records.',
+        constraint: 'Teams worked across time zones and different work weeks, including the Middle East. Regulatory changes also reshaped solutions, leaving little shared working time.',
+        outcome: 'I delivered around 45% of 2022 global fiat payment projects and helped the team establish a more dependable cross-region delivery standard.',
+      },
+      concept: {
+        label: 'Concept relationship',
+        title: 'Shared standards for cross-region delivery',
+        intro: 'When time zones and work weeks differ, common flow, completion criteria, and traceable records keep delivery moving.',
+        items: [
+          {
+            term: 'E2E',
+            title: 'End-to-end flow',
+            description: 'Defines ownership, inputs, and outputs from demand intake through launch acceptance.',
+          },
+          {
+            term: 'DOD',
+            title: 'Definition of done',
+            description: 'Gives regions and functions one standard for completion, reducing rework and handoff gaps.',
+          },
+          {
+            term: 'Async records',
+            title: 'Keep decisions traceable',
+            description: 'Records decisions, risks, and next owners so work continues outside overlapping hours.',
+          },
+        ],
+        foundationLabel: 'Operating base',
+        foundation: 'Regional communication windows and escalation paths keep the shared standards working',
+      },
       role: 'Global payments PMO / cross-cultural collaboration / agile transformation',
       metrics: ['Delivered around 45% of 2022 global fiat payment projects', 'Covered APAC, Africa, and LATAM', 'Landed E2E flow and DOD'],
       tags: ['Global delivery', 'Fiat payment', 'Cross-region PMO'],
@@ -954,7 +1284,15 @@ const education = [
 
 const signalIcons = [Target, ShieldCheck, Layers3, Sparkles];
 
-function BrandLogo({ company, size = 'md' }: { company: string; size?: 'sm' | 'md' | 'lg' }) {
+function BrandLogo({
+  company,
+  isZh,
+  size = 'md',
+}: {
+  company: string;
+  isZh: boolean;
+  size?: 'sm' | 'md' | 'lg';
+}) {
   const brand = brandLogoAssets[company as BrandName] ?? {
     src: '',
     bg: '#ffffff',
@@ -972,10 +1310,15 @@ function BrandLogo({ company, size = 'md' }: { company: string; size?: 'sm' | 'm
     <span
       className={`brand-logo-frame inline-flex shrink-0 items-center justify-center border ${sizes[size]}`}
       style={{ background: brand.bg, borderColor: brand.border, boxShadow: brand.shadow, padding: brand.pad }}
-      aria-hidden="true"
     >
       {brand.src ? (
-        <img className="brand-logo-image" src={brand.src} alt="" loading="lazy" decoding="async" />
+        <img
+          className="brand-logo-image"
+          src={brand.src}
+          alt={isZh ? `${company} 公司标志` : `${company} company logo`}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         company.slice(0, 1)
       )}
@@ -983,16 +1326,29 @@ function BrandLogo({ company, size = 'md' }: { company: string; size?: 'sm' | 'm
   );
 }
 
-function SchoolLogo({ mark }: { mark: keyof typeof schoolLogoAssets }) {
-  const school = schoolLogoAssets[mark];
+function SchoolLogo({
+  mark,
+  school,
+  isZh,
+}: {
+  mark: keyof typeof schoolLogoAssets;
+  school: string;
+  isZh: boolean;
+}) {
+  const schoolAsset = schoolLogoAssets[mark];
 
   return (
     <span
       className="school-logo-frame inline-flex h-20 w-48 shrink-0 items-center justify-center rounded-[1.35rem] border"
-      style={{ background: school.bg, borderColor: school.border, padding: school.pad, boxShadow: '0 18px 48px rgba(0, 0, 0, 0.22)' }}
-      aria-hidden="true"
+      style={{ background: schoolAsset.bg, borderColor: schoolAsset.border, padding: schoolAsset.pad, boxShadow: '0 18px 48px rgba(0, 0, 0, 0.22)' }}
     >
-      <img className="school-logo-image" src={school.src} alt="" loading="lazy" decoding="async" />
+      <img
+        className="school-logo-image"
+        src={schoolAsset.src}
+        alt={isZh ? `${school}校徽` : `${school} logo`}
+        loading="lazy"
+        decoding="async"
+      />
     </span>
   );
 }
@@ -1069,7 +1425,7 @@ function HeroCaseCarousel({ isZh }: { isZh: boolean }) {
           titleFrom: '项目数据',
           titleTo: '决策支持',
           inputTitle: '工作输入',
-          inputs: ['多维表格', 'Meegle', 'MCP', 'AI Skills'],
+          inputs: ['多维表格', 'Meegle', 'MCP', 'AI 技能'],
           controlTitle: '辅助流程',
           controls: ['信息结构化', '异常识别', '分析初稿', 'PM 校准'],
           outcomeTitle: '产出效率',
@@ -1184,7 +1540,7 @@ function HeroCaseCarousel({ isZh }: { isZh: boolean }) {
             <p>{isZh ? '代表案例' : 'Selected case'} / {String(activeIndex + 1).padStart(2, '0')}</p>
             <h2>{activeSlide.titleFrom} <ArrowRight className="h-5 w-5" /> {activeSlide.titleTo}</h2>
           </div>
-          <BrandLogo company={activeSlide.company} size="sm" />
+          <BrandLogo company={activeSlide.company} isZh={isZh} size="sm" />
         </div>
         <div className="hero-map-flow">
           <section className="hero-map-stage hero-map-inputs">
@@ -1574,7 +1930,6 @@ export default function App() {
       return 'light';
     }
   });
-  const [expandedCase, setExpandedCase] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const t = content[language];
   const isZh = language === 'zh';
@@ -1613,10 +1968,6 @@ export default function App() {
   useEffect(() => {
     setLanguage(routeLanguage);
   }, [routeLanguage]);
-  useEffect(() => {
-    setExpandedCase(null);
-  }, [language]);
-
   useEffect(() => {
     setMobileNavOpen(false);
   }, [language, theme, pathname]);
@@ -1692,16 +2043,20 @@ export default function App() {
 
   if (currentCaseStudy) {
     const detailSections = [
-      [isZh ? '项目背景' : 'Background', currentCaseStudy.details.background],
-      [isZh ? '核心挑战' : 'Challenge', currentCaseStudy.details.challenge],
-      [isZh ? '我的角色' : 'My role', currentCaseStudy.details.role],
-      [isZh ? '交付结果' : 'Result', currentCaseStudy.details.result],
-      [isZh ? '方法沉淀' : 'Reflection', currentCaseStudy.details.reflection],
+      { id: 'background', number: '01', label: isZh ? '项目背景' : 'Background', value: currentCaseStudy.details.background },
+      { id: 'challenge', number: '02', label: isZh ? '核心挑战' : 'Challenge', value: currentCaseStudy.details.challenge },
+      { id: 'role', number: '03', label: isZh ? '我的角色' : 'My role', value: currentCaseStudy.details.role },
+      { id: 'result', number: '04', label: isZh ? '交付结果' : 'Result', value: currentCaseStudy.details.result },
+    ];
+    const overviewItems = [
+      { label: isZh ? '项目' : 'Project', value: currentCaseStudy.overview.project },
+      { label: isZh ? '职责' : 'Ownership', value: currentCaseStudy.overview.ownership },
+      { label: isZh ? '约束' : 'Constraint', value: currentCaseStudy.overview.constraint },
+      { label: isZh ? '结果' : 'Outcome', value: currentCaseStudy.overview.outcome },
     ];
 
     return (
       <main className={`site-shell case-page min-h-screen ${themeClass} ${isZh ? 'site-zh' : 'site-en'}`}>
-        <div className="hero-grid" />
         <header className="site-header journal-header relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
           <a href={`${localizePath('/', language)}#case-studies`} className="identity-lockup" aria-label={isZh ? '返回案例列表' : 'Back to case studies'}>
             <span className="identity-mark">CL</span>
@@ -1724,62 +2079,154 @@ export default function App() {
           </div>
         </header>
 
-        <article className="case-page-shell mx-auto max-w-7xl px-6 pb-24 pt-14 sm:px-8">
+        <article className="case-page-shell mx-auto max-w-7xl px-6 pb-24 pt-10 sm:px-8">
           <div className="case-page-hero">
-            <div className="case-page-heading">
+            <div className="case-page-hero-topline">
               <p className="section-kicker">{currentCaseStudy.label}</p>
+              <div className="case-page-brand">
+                <BrandLogo company={currentCaseStudy.company} isZh={isZh} size="lg" />
+                <span>{currentCaseStudy.company}</span>
+              </div>
+            </div>
+            <div className="case-page-heading">
               <h1>{currentCaseStudy.title}</h1>
               <p className="case-page-summary">{currentCaseStudy.summary}</p>
             </div>
-            <div className="case-page-brand">
-              <BrandLogo company={currentCaseStudy.company} size="lg" />
-              <span>{currentCaseStudy.company}</span>
+            <div className="case-page-meta">
+              <div className="case-page-role">
+                <BriefcaseBusiness className="h-5 w-5" />
+                <span>{currentCaseStudy.role}</span>
+              </div>
+              <div className="case-page-tags" aria-label={isZh ? '案例关键词' : 'Case keywords'}>
+                {currentCaseStudy.tags.map((tag) => <span key={tag}>{tag}</span>)}
+              </div>
             </div>
           </div>
 
-          <div className="case-page-role">
-            <BriefcaseBusiness className="h-5 w-5" />
-            <span>{currentCaseStudy.role}</span>
-          </div>
+          <section className="case-page-overview" aria-labelledby="case-overview-heading">
+            <div className="case-page-section-label">
+              <span>{isZh ? '项目概览' : 'Project brief'}</span>
+              <h2 id="case-overview-heading">{isZh ? '项目要点' : 'Project essentials'}</h2>
+            </div>
+            <div className="case-page-overview-grid">
+              {overviewItems.map((item, index) => (
+                <div key={item.label}>
+                  <span>{String(index + 1).padStart(2, '0')} / {item.label}</span>
+                  <p>{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-          <div className="case-page-metrics" aria-label={isZh ? '关键成果' : 'Key outcomes'}>
-            {currentCaseStudy.metrics.map((metric) => (
-              <div key={metric}>{metric}</div>
-            ))}
-          </div>
+          {currentCaseStudy.concept ? (
+            <section className="case-page-concept" aria-labelledby="case-concept-heading">
+              <div className="case-page-concept-heading">
+                <span>{currentCaseStudy.concept.label}</span>
+                <h2 id="case-concept-heading">{currentCaseStudy.concept.title}</h2>
+                <p>{currentCaseStudy.concept.intro}</p>
+              </div>
+              <div className="case-page-concept-map">
+                <div className="case-page-concept-items">
+                  {currentCaseStudy.concept.items.map((item, index) => (
+                    <article key={item.term}>
+                      <div>
+                        <small>{String(index + 1).padStart(2, '0')}</small>
+                        <strong>{item.term}</strong>
+                      </div>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </article>
+                  ))}
+                </div>
+                <div className="case-page-concept-foundation">
+                  <span>{currentCaseStudy.concept.foundationLabel}</span>
+                  <p>{currentCaseStudy.concept.foundation}</p>
+                </div>
+              </div>
+            </section>
+          ) : null}
 
-          <div className="case-page-narrative">
-            {detailSections.map(([label, value]) => (
-              <section key={label}>
-                <h2>{label}</h2>
-                <p>{value}</p>
+          <section className="case-page-outcomes" aria-labelledby="case-outcomes-heading">
+            <div className="case-page-section-label">
+              <span>{isZh ? '关键成果' : 'Outcomes'}</span>
+              <h2 id="case-outcomes-heading">{isZh ? '先看结论' : 'At a glance'}</h2>
+            </div>
+            <div className="case-page-metrics">
+              {currentCaseStudy.metrics.map((metric, index) => (
+                <div key={metric}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{metric}</strong>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <div className="case-page-body">
+            <aside className="case-page-index" aria-label={isZh ? '案例目录' : 'Case outline'}>
+              <span>{isZh ? '案例脉络' : 'Case outline'}</span>
+              <nav>
+                {detailSections.map((section) => (
+                  <a key={section.id} href={`#case-${section.id}`}>
+                    <small>{section.number}</small>
+                    {section.label}
+                  </a>
+                ))}
+                <a href="#case-reflection">
+                  <small>05</small>
+                  {isZh ? '方法沉淀' : 'Reflection'}
+                </a>
+              </nav>
+            </aside>
+
+            <div className="case-page-narrative">
+              {detailSections.map((section) => (
+                <section id={`case-${section.id}`} key={section.id}>
+                  <div className="case-page-chapter-label">
+                    <span>{section.number}</span>
+                    <h2>{section.label}</h2>
+                  </div>
+                  <p>{section.value}</p>
+                </section>
+              ))}
+              <section id="case-reflection" className="case-page-reflection">
+                <div className="case-page-chapter-label">
+                  <span>05</span>
+                  <h2>{isZh ? '方法沉淀' : 'Reflection'}</h2>
+                </div>
+                <blockquote>{currentCaseStudy.details.reflection}</blockquote>
               </section>
-            ))}
+            </div>
           </div>
 
           <div className="case-page-operating-model">
-            <section>
-              <h2>{isZh ? '关键动作' : 'Actions'}</h2>
-              <ol>
-                {currentCaseStudy.details.actions.map((action, index) => (
-                  <li key={action}>
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    {action}
-                  </li>
-                ))}
-              </ol>
-            </section>
-            <section>
-              <h2>{isZh ? '搭建的机制' : 'Systems built'}</h2>
-              <ul>
-                {currentCaseStudy.details.systemBuilt.map((system) => (
-                  <li key={system}>
-                    <ShieldCheck className="h-5 w-5" />
-                    {system}
-                  </li>
-                ))}
-              </ul>
-            </section>
+            <div className="case-page-section-label">
+              <span>{isZh ? '执行系统' : 'Operating model'}</span>
+              <h2>{isZh ? '从动作到机制' : 'From actions to systems'}</h2>
+            </div>
+            <div className="case-page-operating-grid">
+              <section>
+                <h3>{isZh ? '关键动作' : 'Actions'}</h3>
+                <ol>
+                  {currentCaseStudy.details.actions.map((action, index) => (
+                    <li key={action}>
+                      <span>{String(index + 1).padStart(2, '0')}</span>
+                      {action}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+              <section>
+                <h3>{isZh ? '搭建的机制' : 'Systems built'}</h3>
+                <ul>
+                  {currentCaseStudy.details.systemBuilt.map((system) => (
+                    <li key={system}>
+                      <ShieldCheck className="h-5 w-5" />
+                      {system}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
           </div>
 
           <footer className="case-page-footer">
@@ -1981,14 +2428,6 @@ export default function App() {
 
           <div className="case-study-stack mt-14">
             {cases.map((item, index) => {
-              const isOpen = expandedCase === item.id;
-              const detailRows = [
-                [isZh ? '业务背景' : 'Background', item.details.background],
-                [isZh ? '核心挑战' : 'Challenge', item.details.challenge],
-                [isZh ? '我的角色' : 'My Role', item.details.role],
-                [isZh ? '结果' : 'Result', item.details.result],
-                [isZh ? '方法沉淀' : 'Reflection', item.details.reflection],
-              ];
               const groupHeading =
                 index === 0
                   ? {
@@ -2041,51 +2480,10 @@ export default function App() {
                           <ExternalLink className="h-4 w-4" />
                         </a>
                       ) : null}
-                      <button
-                        type="button"
-                        className="case-toggle"
-                        aria-expanded={isOpen}
-                        aria-controls={`${item.id}-detail`}
-                        onClick={() => setExpandedCase(isOpen ? null : item.id)}
-                      >
-                        {isOpen ? (isZh ? '收起案例' : 'Close story') : isZh ? '展开完整案例' : 'Read full story'}
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
                       <a className="case-page-link" href={getCasePath(item.id, language)}>
-                        {isZh ? '案例详情页' : 'Open case page'}
-                        <ExternalLink className="h-4 w-4" />
+                        {isZh ? '查看案例详情' : 'View case study'}
+                        <ArrowRight className="h-4 w-4" />
                       </a>
-                    </div>
-                  </div>
-
-                  <div id={`${item.id}-detail`} className={`case-detail ${isOpen ? 'is-open' : ''}`}>
-                    <div className="case-detail-inner">
-                      <div className="case-detail-grid">
-                        {detailRows.map(([label, value]) => (
-                          <div key={label} className="case-detail-row">
-                            <span>{label}</span>
-                            <p>{value}</p>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="case-detail-columns">
-                        <div>
-                          <h4>{isZh ? '关键动作' : 'Actions'}</h4>
-                          <ul>
-                            {item.details.actions.map((action) => (
-                              <li key={action}>{action}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div>
-                          <h4>{isZh ? '搭建的机制' : 'System Built'}</h4>
-                          <ul>
-                            {item.details.systemBuilt.map((system) => (
-                              <li key={system}>{system}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   </article>
@@ -2209,7 +2607,11 @@ export default function App() {
                   <span className="education-card-period">{item.period}</span>
                 </div>
                 <div className="flex items-start justify-between gap-5">
-                  <SchoolLogo mark={item.mark as keyof typeof schoolLogoAssets} />
+                  <SchoolLogo
+                    mark={item.mark as keyof typeof schoolLogoAssets}
+                    school={isZh ? item.zh : item.school}
+                    isZh={isZh}
+                  />
                   <ExternalLink className="h-5 w-5" style={{ color: 'var(--sage)' }} />
                 </div>
                 <p className="education-card-lead">{isZh ? item.zhLead : item.enLead}</p>
