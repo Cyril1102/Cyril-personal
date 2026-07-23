@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.0] - 2026-07-23
+
+### Added
+
+- Added a bilingual floating profile concierge for quick questions about background, case studies, work method, AI PMO, education, and contact options.
+- Added site-content-only answer matching with suggested questions, free-text input, humorous fallback copy, and an email handoff when repeated questions fall outside the knowledge base.
+- Added hidden 3/5/7-question milestones for visitors who repeatedly explore beyond the concierge knowledge boundary.
+- Added a three-state pixel-art Miaobi launcher that cycles through paws-tucked, blink, and paw-licking animations.
+- Added responsive dark/light styling for the concierge launcher, chat panel, quick-question controls, and mailto escalation path.
+
+### Improved
+
+- Renamed the concierge to Miaobi / 喵比, added a photo-referenced tabby-cat mascot, and rewrote answers in a friend-like assistant voice that clearly distinguishes Miaobi from Baixi.
+- Tightened English keyword matching to whole words and kept the latest conversation message in view automatically.
+
 ## [1.1.3] - 2026-07-19
 
 ### Improved
