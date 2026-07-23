@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, type JSX } from 'react';
+import { Fragment, useEffect, useRef, useState, type JSX } from 'react';
 import baixiJournalBodyZh from './content/baixi-xyz-小白建站全记录.md?raw';
 import baixiJournalBodyEn from './content/baixi-xyz-build-log.en.md?raw';
 import vibeCodingJournalBodyZh from './content/vibe-coding-portfolio-retrospective.md?raw';
@@ -22,10 +22,12 @@ import {
   ExternalLink,
   FileText,
   GraduationCap,
+  HelpCircle,
   Layers3,
   Mail,
   Menu,
   Route,
+  Send,
   ShieldCheck,
   Sparkles,
   Target,
@@ -1158,13 +1160,13 @@ const experiences = {
       company: 'HAND',
       period: '2016 - 2018',
       website: 'https://www.hand-china.com/',
-      role: 'QA Engineer',
-      summary: '企业级项目交付、需求分析、测试验证、缺陷闭环。',
+      role: '咨询顾问 / QA Engineer',
+      summary: '从企业咨询切入项目实施，后转向 QA，负责需求分析、测试验证与缺陷闭环。',
       paragraphs: [
-        'HAND 是我进入企业级交付体系的起点。QA 工作让我从需求、实现、验证到上线去看一个项目，也让我更早形成了质量意识。',
+        'HAND 是我进入企业级交付体系的起点。我先做咨询顾问，接触企业项目实施，后来转到 QA，从需求、实现、验证到上线去看完整链路。',
         'K12 项目从需求分析、测试执行到上线交付的全过程，以及缺陷修复和上线前验证，构成了后续项目管理能力里的质量意识和全链路视角。',
       ],
-      outcomes: ['建立质量和验证意识', '理解企业项目实施流程', '形成全链路交付视角'],
+      outcomes: ['积累咨询与需求理解经验', '建立质量和验证意识', '形成全链路交付视角'],
     },
   ],
   en: [
@@ -1236,13 +1238,13 @@ const experiences = {
       company: 'HAND',
       period: '2016 - 2018',
       website: 'https://www.hand-china.com/',
-      role: 'QA Engineer',
-      summary: 'Enterprise delivery, requirement analysis, test validation, and defect closure.',
+      role: 'Consultant / QA Engineer',
+      summary: 'Started in enterprise consulting, then moved into QA across requirement analysis, test validation, and defect closure.',
       paragraphs: [
-        'HAND was my entry point into enterprise delivery. QA work taught me to see a project end to end: requirements, implementation, validation, and launch.',
+        'HAND was my entry point into enterprise delivery. I started as a consultant, learned how enterprise projects were implemented, and later moved into QA to follow the full chain from requirements through validation and launch.',
         'The K12 project covered requirement analysis, testing, go-live, defect resolution, and pre-launch checks. It gave me the quality discipline that later carried into my project management work.',
       ],
-      outcomes: ['Built quality and validation discipline', 'Understood enterprise implementation flow', 'Formed a full-chain delivery view'],
+      outcomes: ['Built consulting and requirement-analysis experience', 'Developed quality discipline', 'Formed a full-chain delivery view'],
     },
   ],
 };
@@ -1283,6 +1285,389 @@ const education = [
 ];
 
 const signalIcons = [Target, ShieldCheck, Layers3, Sparkles];
+
+type ConciergeMessage = {
+  id: string;
+  role: 'bot' | 'user';
+  text: string;
+  milestone?: 3 | 5 | 7;
+};
+
+type ConciergeAnswer = {
+  id: string;
+  label: string;
+  patterns: string[];
+  answer: {
+    zh: string;
+    en: string;
+  };
+};
+
+const contactEmail = 'lbxcyril@gmail.com';
+
+const conciergeAnswers: ConciergeAnswer[] = [
+  {
+    id: 'miaobi-identity',
+    label: '你是谁',
+    patterns: ['你是谁', '你叫什么', '介绍一下你自己', '你是柏希吗', '你和柏希什么关系', '喵比是谁', 'who are you'],
+    answer: {
+      zh: '我是喵比，柏希的助理，也是这个网站里负责讲故事的那位。柏希负责把复杂项目做成，我负责把他的经历讲明白。你想认识他，可以从职业经历、项目案例或 AI PMO 开始问。',
+      en: 'I am Miaobi, Baixi’s assistant and the storyteller around here. Baixi handles the complicated projects; I help make the stories behind them easier to understand. Ask me about his career, project cases, or AI PMO work.',
+    },
+  },
+  {
+    id: 'miaobi-name',
+    label: '为什么叫喵比',
+    patterns: ['为什么叫喵比', '喵比这个名字', '名字叫喵比', '名字怎么来的', 'miaobi', 'name'],
+    answer: {
+      zh: '这个名字是柏希定的，没有一段需要查族谱的典故。大概是听着亲近，又有一点猫猫的机灵劲。名字嘛，叫一声愿意回头就算合格，我挺喜欢。',
+      en: 'Baixi chose the name. There is no grand origin story that requires a family archive; it simply sounds friendly and carries a little feline quickness. A good name should make you want to turn around when someone calls it. I like this one.',
+    },
+  },
+  {
+    id: 'miaobi-capabilities',
+    label: '喵比会什么',
+    patterns: ['你会什么', '你能做什么', '能问什么', '可以问什么', '会干什么', 'capabilities', 'help'],
+    answer: {
+      zh: '我最会讲柏希。你可以问他的职业经历、代表项目、工作方法、AI PMO、教育背景和联系方式，换一种说法我通常也听得懂。再往外的题，我会老实告诉你不知道。我的工作是当个靠谱助理，不是硬装成全世界百科。',
+      en: 'I know Baixi best. Ask about his career, project stories, way of working, AI PMO practice, education, or contact details; I can usually follow different wording too. If a question goes beyond that, I will say so honestly. My job is to be a reliable assistant, not the encyclopedia of everything.',
+    },
+  },
+  {
+    id: 'intro',
+    label: '快速介绍一下柏希',
+    patterns: ['介绍柏希', '介绍一下柏希', '柏希是谁', '柏希做什么', 'baixi', 'intro', 'about', '背景', 'profile', 'summary'],
+    answer: {
+      zh: '简单说，柏希是个专门把复杂事情理顺的人。他从咨询顾问起步，后来做 QA，再一路走到 PMO，管过全球支付、海外业务，也管过一大堆同时往前跑的项目。别人问“什么时候上线”，他通常还会多问一句：“这事真的想明白了吗？”',
+      en: 'In short, Baixi is good at bringing order to complicated work. He started in consulting, moved into QA, and then grew into PMO, taking on global payments, international business, and portfolios full of projects moving at once. When someone asks, “When can we launch?”, he is usually the person who also asks, “Have we actually thought this through?”',
+    },
+  },
+  {
+    id: 'experience',
+    label: '柏希经历过哪些公司',
+    patterns: ['经历', '工作', '公司', 'experience', 'career', 'gate', 'binance', 'coins', 'ctrip', '携程'],
+    answer: {
+      zh: '柏希最早在 HAND 做咨询顾问，后来转到 QA，之后去了 WeWork、携程、Binance、Coins.ph 和 Gate。一路从企业项目实施做到互联网产品、全球支付、海外市场和多业务线 PMO。公司换了几站，他关心的事情也越变越大：先理解业务怎么运转，再看功能对不对，后来还要判断整个项目值不值得做、能不能稳稳落地。',
+      en: 'Baixi started as a consultant at HAND and later moved into QA before joining WeWork, Ctrip.com, Binance, Coins.ph, and Gate. His scope grew from enterprise implementation into internet products, global payments, international markets, and portfolio PMO. The questions grew too: first understanding how the business worked, then whether the product worked, and eventually whether the whole project was worth doing and could land safely.',
+    },
+  },
+  {
+    id: 'cases',
+    label: '柏希最值得看的案例',
+    patterns: ['案例', '项目', '亮点', '成果', 'case', 'project', 'achievement', 'portfolio'],
+    answer: {
+      zh: '时间不多的话，先看三个。第一是 Gate.io 换成 Gate.com，三周内把 App、网站、邮件、客服和多语言页面一起迁完，没出大事故。第二是设计交付自动化，每周 200 多个需求终于不用靠人到处捞。第三是 AI PMO，他把周报、风险检查和内容流程串起来，让机器先收拾信息，人留下来做判断。',
+      en: 'If time is short, start with three stories. First, the Gate.io to Gate.com migration: app, web, email, support, and multilingual pages moved within three weeks, with no major incidents. Second, design delivery automation, which brought 200+ weekly requests into one working flow. Third, AI PMO, where Baixi connected reporting, risk review, and content workflows so machines could sort the information and people could keep the judgment.',
+    },
+  },
+  {
+    id: 'method',
+    label: '柏希的工作方法是什么',
+    patterns: ['方法', '风格', '怎么做', '能力', 'method', 'style', 'approach', 'strength'],
+    answer: {
+      zh: '柏希做项目，不会一上来就催进度。他先问为什么做、做到哪、谁负责、什么才算完成。风险也喜欢早点摊开，免得临上线才突然冒头。至于周报，他最怕写成流水账，最好让人扫两眼就知道：哪里要帮忙，谁得做决定。',
+      en: 'Baixi does not begin a project by chasing status updates. He first asks why it matters, where the boundary is, who owns it, and what “done” actually means. He also prefers risks to show up early. A useful report, in his view, should quickly reveal where help is needed and who needs to decide.',
+    },
+  },
+  {
+    id: 'education',
+    label: '教育背景',
+    patterns: ['教育', '学校', '学历', '曼彻斯特', 'education', 'school', 'degree', 'manchester'],
+    answer: {
+      zh: '柏希本科在西南财经大学天府学院学审计，后来去曼彻斯特大学读商业项目管理硕士。一个让他习惯看证据、结构和风险，一个帮他把项目现场里的直觉整理成方法。现在回头看，这两段经历还挺接得上。',
+      en: 'Baixi studied Auditing at Tianfu College of SWUFE, then completed an MSc in Commercial Project Management at The University of Manchester. One trained his eye for evidence, structure, and risk; the other helped turn practical project instincts into a repeatable way of working.',
+    },
+  },
+  {
+    id: 'ai',
+    label: 'AI PMO 做过什么',
+    patterns: ['ai', 'pmo', '自动化', 'mcp', 'meegle', '飞书', 'automation', 'workflow'],
+    answer: {
+      zh: '柏希做 AI PMO，不是为了给流程撒一层 AI 亮粉。他把飞书多维表格、Meegle、MCP 和 AI Skills 接进日常，用来打周报底稿、做迭代分析、找风险，也串过 SEO 的关键词、内容和复盘流程。他的原则很简单：AI 先把桌面收干净，人坐下来做判断。',
+      en: 'Baixi does not use AI PMO to sprinkle AI glitter over an old process. He has connected Feishu Bitable, Meegle, MCP, and AI Skills to draft reports, analyze iterations, surface risks, and support SEO workflows from keywords to review. His rule is simple: AI clears the desk; people make the call.',
+    },
+  },
+  {
+    id: 'contact',
+    label: '怎么联系柏希',
+    patterns: ['联系', '邮箱', '领英', 'contact', 'email', 'linkedin', 'hire', 'interview'],
+    answer: {
+      zh: `想联系柏希，可以写邮件到 ${contactEmail}，也可以从页面底部找到他的 LinkedIn。工作机会、项目合作，或者想继续聊某段经历，都欢迎来信。`,
+      en: `You can reach Baixi at ${contactEmail} or through the LinkedIn link at the bottom of the page. Opportunities, collaborations, and follow-up questions are all welcome.`,
+    },
+  },
+];
+
+const conciergeQuickQuestionIds = ['intro', 'cases', 'method', 'ai', 'contact'];
+
+function getConciergeQuickLabel(id: string, language: Language) {
+  const labels: Record<string, Record<Language, string>> = {
+    intro: { zh: '快速介绍一下柏希', en: 'Meet Baixi' },
+    cases: { zh: '柏希最值得看的案例', en: "Baixi's best stories" },
+    method: { zh: '柏希的工作方法', en: 'How Baixi works' },
+    ai: { zh: 'AI PMO 做过什么', en: 'AI PMO work' },
+    contact: { zh: '怎么联系柏希', en: 'Contact Baixi' },
+  };
+
+  return labels[id]?.[language] ?? id;
+}
+
+function findConciergeAnswer(input: string) {
+  const normalized = input.trim().toLowerCase().replace(/[.,!?;:，。！？；：、"'“”‘’()[\]{}]/g, ' ');
+
+  if (!normalized) {
+    return null;
+  }
+
+  return (
+    conciergeAnswers.find((item) =>
+      item.patterns.some((pattern) => {
+        const normalizedPattern = pattern.toLowerCase();
+        const isLatinPattern = /^[a-z0-9\s.+-]+$/i.test(normalizedPattern);
+
+        if (!isLatinPattern) {
+          return normalized.includes(normalizedPattern);
+        }
+
+        if (normalizedPattern.includes(' ')) {
+          return normalized.includes(normalizedPattern);
+        }
+
+        return normalized
+          .split(/\s+/)
+          .filter(Boolean)
+          .some((word) => word === normalizedPattern);
+      }),
+    ) ?? null
+  );
+}
+
+function pickStableText(items: string[], seed: string) {
+  const score = Array.from(seed).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return items[score % items.length];
+}
+
+function getConciergeFallback(language: Language, unknownCount: number, question: string) {
+  const milestones: Record<3 | 5 | 7, Record<Language, string>> = {
+    3: {
+      zh: '连续三次走出资料区，恭喜获得隐藏称号「喵比边界体验官」。我确实不知道，但你已经很懂怎么找到我的知识边界了。想认真追问，可以写信给柏希；想聊通用知识，Cha 老师今天应该有空。',
+      en: 'Three out-of-scope questions in a row: you have unlocked “Miaobi Boundary Tester.” I genuinely do not know, but you clearly know how to find the edge of my notes. Write to Baixi for a serious follow-up, or ask Cha teacher for general knowledge.',
+    },
+    5: {
+      zh: '五连超纲达成，称号升级为「喵比压力测试员」。能把一个个人网站助理问到这个份上，也是一种专业能力。关于柏希，可以继续问我；关于世界，建议请教 Cha 老师。',
+      en: 'Five in a row: title upgraded to “Miaobi Stress Tester.” Pushing a personal-site assistant this far is a skill in itself. Keep asking me about Baixi, or ask Cha teacher about the wider world.',
+    },
+    7: {
+      zh: '七连超纲，终极隐藏称号「站外世界探索家」已解锁。你问的世界比这个网站大多了，而我主打一个诚实：资料没有，我就不编。这道题可以写信给柏希，看看他愿不愿意亲自接棒。',
+      en: 'Seven out-of-scope questions: the final hidden title, “Beyond the Site,” is yours. Your questions are bigger than this site, and honesty is still my whole act: no source, no invention. Write to Baixi and see whether he wants to take this one himself.',
+    },
+  };
+  const milestone = [3, 5, 7].includes(unknownCount) ? (unknownCount as 3 | 5 | 7) : undefined;
+
+  if (milestone) {
+    return {
+      text: milestones[milestone][language],
+      milestone,
+    };
+  }
+
+  const zhFallbacks = [
+    '这题跑出我的资料夹了，我就不硬编啦。换个方向吧，可以问问柏希的经历、项目、AI PMO 或联系方式。',
+    '这道题我接不住，但边界说清楚也算一种靠谱。想了解柏希怎么做项目、怎么一路走到 PMO，我很能聊。',
+    '这个方向柏希老师也不一定专业，不如问问 Cha 老师。拐回柏希的故事，我马上又能接上。',
+    '我认真找了一圈，手里没有这题的答案。与其一本正经地猜，不如坦白说不知道。你可以继续问柏希和他的项目。',
+  ];
+  const enFallbacks = [
+    'That one has wandered outside my notes, so I will not make it up. Try asking about Baixi’s career, projects, AI PMO work, education, or contact details.',
+    'I cannot catch that question, but being clear about the boundary is part of being reliable. Ask how Baixi works or how he found his way into PMO; I have plenty to say there.',
+    'Baixi may not be the right expert for that either, so Cha teacher is probably a better stop. Turn back toward Baixi’s story and I can pick it up again.',
+    'I looked carefully and do not have an answer for that one. A confident guess would still be a guess. Try asking about Baixi or one of his projects.',
+  ];
+
+  const options = language === 'zh' ? zhFallbacks : enFallbacks;
+
+  return {
+    text: pickStableText(options, `${question}-${unknownCount}-${language}`),
+  };
+}
+
+function buildContactHref(language: Language, question: string) {
+  const subject = language === 'zh' ? '来自 baixi.xyz 喵比的问题' : 'Question from baixi.xyz Miaobi';
+  const body =
+    language === 'zh'
+      ? `你好，我在 baixi.xyz 上问了喵比，但它没有找到答案。\n\n我的问题是：${question || '我想进一步了解你的背景'}`
+      : `Hi, I asked Miaobi on baixi.xyz, but she could not find an answer.\n\nMy question: ${question || 'I would like to learn more about your background.'}`;
+
+  return `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function ProfileConcierge({ language, isZh }: { language: Language; isZh: boolean }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [input, setInput] = useState('');
+  const [unknownCount, setUnknownCount] = useState(0);
+  const [lastQuestion, setLastQuestion] = useState('');
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<ConciergeMessage[]>(() => [
+    {
+      id: 'hello',
+      role: 'bot',
+      text: isZh
+        ? '你好，我是喵比。这个网站放得下经历，却很难讲清经历背后的故事。比如三周完成品牌迁移是什么感受，柏希怎么一路走到 PMO，又为什么开始折腾 AI。你挑一段感兴趣的，我慢慢讲给你听。'
+        : 'Hi, I am Miaobi. This site can hold the experience, but it cannot quite tell the stories behind it. You might ask what a three-week brand migration felt like, how Baixi found his way into PMO, or why he started tinkering with AI. Pick a thread that interests you, and I will take it from there.',
+    },
+  ]);
+
+  useEffect(() => {
+    setMessages([
+      {
+        id: 'hello',
+        role: 'bot',
+        text: isZh
+          ? '你好，我是喵比。这个网站放得下经历，却很难讲清经历背后的故事。比如三周完成品牌迁移是什么感受，柏希怎么一路走到 PMO，又为什么开始折腾 AI。你挑一段感兴趣的，我慢慢讲给你听。'
+          : 'Hi, I am Miaobi. This site can hold the experience, but it cannot quite tell the stories behind it. You might ask what a three-week brand migration felt like, how Baixi found his way into PMO, or why he started tinkering with AI. Pick a thread that interests you, and I will take it from there.',
+      },
+    ]);
+    setUnknownCount(0);
+    setLastQuestion('');
+    setInput('');
+  }, [isZh]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isOpen, messages]);
+
+  const sendQuestion = (question: string) => {
+    const trimmedQuestion = question.trim();
+
+    if (!trimmedQuestion) {
+      return;
+    }
+
+    const matchedAnswer = findConciergeAnswer(trimmedQuestion);
+    const nextUnknownCount = matchedAnswer ? 0 : unknownCount + 1;
+    const fallback = getConciergeFallback(language, nextUnknownCount, trimmedQuestion);
+
+    setMessages((current) => [
+      ...current,
+      { id: `user-${Date.now()}`, role: 'user', text: trimmedQuestion },
+      {
+        id: `bot-${Date.now()}`,
+        role: 'bot',
+        text: matchedAnswer ? matchedAnswer.answer[language] : fallback.text,
+        milestone: matchedAnswer ? undefined : fallback.milestone,
+      },
+    ]);
+    setUnknownCount(nextUnknownCount);
+    setLastQuestion(trimmedQuestion);
+    setInput('');
+    setIsOpen(true);
+  };
+
+  const quickQuestions = conciergeQuickQuestionIds
+    .map((id) => conciergeAnswers.find((answer) => answer.id === id))
+    .filter((answer): answer is ConciergeAnswer => Boolean(answer));
+
+  return (
+    <section className={`profile-concierge ${isOpen ? 'is-open' : ''}`} aria-label={isZh ? '喵比' : 'Miaobi'}>
+      <button
+        type="button"
+        className="concierge-launcher"
+        onClick={() => setIsOpen((current) => !current)}
+        aria-expanded={isOpen}
+        aria-controls="profile-concierge-panel"
+      >
+        <span className="concierge-launcher-character" aria-hidden="true">
+          <img className="concierge-cat-frame is-loaf" src="/mascots/miaobi-loaf-v1.png" alt="" draggable={false} />
+          <img className="concierge-cat-frame is-blink" src="/mascots/miaobi-blink-v1.png" alt="" draggable={false} />
+          <img className="concierge-cat-frame is-lick" src="/mascots/miaobi-lick-v1.png" alt="" draggable={false} />
+          {isOpen ? (
+            <span className="concierge-launcher-close">
+              <X className="h-3.5 w-3.5" />
+            </span>
+          ) : null}
+        </span>
+        <span className="concierge-launcher-label">{isZh ? '问问喵比' : 'Ask Miaobi'}</span>
+      </button>
+
+      <div id="profile-concierge-panel" className="concierge-panel" hidden={!isOpen}>
+        <div className="concierge-head">
+          <div className="concierge-avatar" aria-hidden="true" />
+          <div>
+            <strong>{isZh ? '喵比' : 'Miaobi'}</strong>
+            <span>{isZh ? '有料就讲故事，没谱就不装懂' : 'Stories when I know; no bluffing when I do not'}</span>
+          </div>
+        </div>
+
+        <div ref={messagesRef} className="concierge-messages" aria-live="polite">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`concierge-message is-${message.role}${message.milestone ? ' is-milestone' : ''}`}
+            >
+              {message.milestone ? (
+                <span className="concierge-milestone-label">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {isZh ? `连续超纲 ${message.milestone} 次` : `${message.milestone} off-site`}
+                </span>
+              ) : null}
+              <p>{message.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="concierge-quick-grid" aria-label={isZh ? '预设问题' : 'Suggested questions'}>
+          {quickQuestions.map((question) => (
+            <button key={question.id} type="button" onClick={() => sendQuestion(getConciergeQuickLabel(question.id, language))}>
+              <HelpCircle className="h-4 w-4" />
+              {getConciergeQuickLabel(question.id, language)}
+            </button>
+          ))}
+        </div>
+
+        {unknownCount >= 3 ? (
+          <a className="concierge-mail-link" href={buildContactHref(language, lastQuestion)}>
+            <Mail className="h-4 w-4" />
+            {unknownCount >= 7
+              ? isZh
+                ? '请柏希接棒'
+                : 'Hand this to Baixi'
+              : isZh
+                ? '写信问问柏希'
+                : 'Email Baixi this question'}
+          </a>
+        ) : null}
+
+        <form
+          className="concierge-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            sendQuestion(input);
+          }}
+        >
+          <input
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder={isZh ? '输入你想了解的问题' : 'Ask a question'}
+            aria-label={isZh ? '输入问题' : 'Type a question'}
+          />
+          <button type="submit" aria-label={isZh ? '发送问题' : 'Send question'}>
+            <Send className="h-4 w-4" />
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+}
 
 function BrandLogo({
   company,
@@ -2245,6 +2630,7 @@ export default function App() {
             </a>
           </footer>
         </article>
+        <ProfileConcierge language={language} isZh={isZh} />
       </main>
     );
   }
@@ -2322,6 +2708,7 @@ export default function App() {
             </div>
           )}
         </section>
+        <ProfileConcierge language={language} isZh={isZh} />
       </main>
     );
   }
@@ -2653,6 +3040,7 @@ export default function App() {
         </div>
         </section>
       </div>
+      <ProfileConcierge language={language} isZh={isZh} />
     </main>
   );
 }
